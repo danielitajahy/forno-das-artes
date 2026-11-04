@@ -1,6 +1,6 @@
 // Cache version bumped for the password visibility and menu ingredient color update.
 // IndexedDB (local orders/settings) is not touched when old asset caches are removed.
-const CACHE='fda-dev-v2-20261103-revisao-pr-v1';
+const CACHE='fda-dev-v2-20261104-finalizacao-v1';
 const ASSETS=['./index.html','./manifest.webmanifest','./app/ui.js','./app/core.js','./app/storage.js','./app/seed.js','./app/app.css','./app/appearance.js','./app/order-intent.js'];
 const scope=new URL(self.registration.scope);
 const ASSET_URLS=new Map(ASSETS.map(path=>[new URL(path,scope).pathname,new URL(path,scope).href]));

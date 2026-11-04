@@ -9,7 +9,7 @@ test('cadastro de Pix individual, edição e proteção contra duplicidade',()=>
  let p=h.state().people[0];assert.equal(p.name,'PESSOA FICTICIA');assert.equal(p.pixKey,'email.ficticio@example.invalid');
  h.send('person.save',{id:p.id,name:'PESSOA FICTICIA',pixKey:'chave-aleatoria-ficticia'});
  p=h.state().people[0];assert.equal(p.pixKey,'chave-aleatoria-ficticia');assert.equal(h.state().people.length,1);
- assert.throws(()=>h.send('person.save',{name:'pietra',pixKey:'outro'}),/já cadastrada/);
+ assert.throws(()=>h.send('person.save',{name:'pessoa ficticia',pixKey:'outro'}),/já cadastrada/);
  const audit=h.state().audit.map(x=>JSON.stringify(x)).join(' ');
  assert.ok(!audit.includes('chave-aleatoria-ficticia'),'Pix não deve vazar no log de auditoria');
 });

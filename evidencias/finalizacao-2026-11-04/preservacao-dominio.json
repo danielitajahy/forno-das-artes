@@ -1,0 +1,15 @@
+{
+  "unchanged_from_authorized_zip": {
+    "app/core.js": true,
+    "app/storage.js": true,
+    "app/seed.js": true
+  },
+  "real_backups_read": false,
+  "real_pins_modified": false,
+  "operational_migration_executed": false,
+  "prepared_private_copy_reprocessed": false,
+  "prices_reference_cents": [
+    1200,
+    4990
+  ]
+}

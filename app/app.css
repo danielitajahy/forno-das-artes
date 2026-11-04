@@ -122,7 +122,7 @@
 @media(max-width:480px){.password-entry{grid-template-columns:minmax(0,1fr) 48px}.password-toggle{width:48px;min-width:48px}.password-toggle-text{display:none}}
 
 /* Ingredientes em alto contraste sobre cartões claros; demais cartões preservados. */
-#lista-sabores>.card .menu-ingredients{color:#203f32;opacity:1;font-weight:600}
+#lista-sabores>.card .menu-ingredients{color:#203f32;opacity:1;font-weight:650;font-size:clamp(1rem,1vw,1.125rem);line-height:1.6}
 #lista-sabores>.card:nth-child(even) .menu-ingredients{color:#56362d;opacity:1}
 
 /* Movimentação financeira detalhada; mantém identidade da Gestão. */
@@ -148,9 +148,11 @@
 #v-gestao .msg{line-height:1.6}
 #v-gestao details{scroll-margin-top:6rem}
 
-/* 2026-11-03: correção pontual do indicador Devedores sobre fundo verde escuro. */
-.staff-layout .card.debt-kpi .tag,.staff-layout .card.debt-kpi .kpi{color:#ffb2a6!important;opacity:1;font-weight:800}
-.staff-layout .card.debt-kpi{border-color:#b96f61}
+/* Finalização: indicador de cobrança terracota escuro, sem mudar seu valor. */
+.staff-layout .card.debt-kpi{background:#713a30;border:1px solid #c98a72;border-inline-start:5px solid #d3a34a;color:#fff6e8;min-width:0;overflow-wrap:anywhere}
+.staff-layout .card.debt-kpi .tag,.staff-layout .card.debt-kpi .kpi{color:#fff6e8!important;opacity:1;font-weight:800}
+.staff-layout .card.debt-kpi .tag{font-size:1rem;line-height:1.5}
+.staff-layout .card.debt-kpi .kpi{font-size:clamp(1.8rem,4vw,2.4rem);line-height:1.3;font-variant-numeric:tabular-nums}
 
 /* Operação sem internet: conteúdo informativo, sem manipulação de banco. */
 #v-contingencia{max-width:1120px;margin-inline:auto}
@@ -164,3 +166,6 @@
 #v-contingencia .offline-slip p{border-bottom:1px solid #afbcb1;padding:.25rem 0}
 #v-contingencia .offline-slip small{display:block;margin-top:.7rem;color:#304b3e}
 @media print{#v-contingencia .offline-alert{background:white;color:#000;border-color:#000}}
+
+/* Alvos de toque no cardápio, sem mudança de preço ou estoque. */
+#lista-sabores .qty .btn{min-width:48px;min-height:48px}

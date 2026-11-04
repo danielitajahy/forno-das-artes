@@ -1,0 +1,10 @@
+PASS Ingredientes escuros, peso >=600, tamanho >=16px e contraste >=4,5:1 em 1920x1080
+PASS Devedores terracota escuro/texto claro >=4,5:1 sem mudar valor, revisão ou dados
+PASS Celular 390x844 sem rolagem horizontal nos ingredientes e na Gestão
+PASS TV em outra janela do MESMO perfil acompanha pagamento fictício por BroadcastChannel
+STEP pronto no caixa
+STEP entregue no caixa
+PASS Painel local acompanha pronto/entregue sem recarga; não é segundo computador
+PASS Oito contextos independentes NÃO compartilham IndexedDB: limite offline comprovado, não sincronização
+PASS Prévia autônoma por HTTP local troca perfil fictício, sem requisições externas ou IndexedDB
+PASS Nenhuma exceção JavaScript nos cenários de finalização

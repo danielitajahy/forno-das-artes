@@ -1,3 +1,15 @@
+# Candidato para conferência de 04/11/2026
+
+**Comece pela prévia sem dados:** extraia todo o ZIP e abra `ABRIR_PREVIA_WINDOWS.cmd`. Ela abre em `http://127.0.0.1:8870/PREVIA_VISUAL.html`, somente fictícia e em memória. Não usa o banco operacional.
+
+Leia [instalação para os totens](docs/INSTALACAO-TOTENS-04-11-2026.md), [relatório atual](docs/RELATORIO-FINALIZACAO-04-11-2026.md) e [capturas antes/depois](evidencias/finalizacao-2026-11-04/COMPARATIVO.html). O Windows real ainda precisa ser testado; o script PowerShell foi executado/testado em Linux. Não atualizar a operação antes de validar a base privada e obter aprovação.
+
+Os dois pedidos de teste já foram removidos da cópia preparada pela responsável: não excluir novamente. A migração operacional não foi executada. **Segundo computador e oito celulares sincronizados não estão prontos**; ver [cenários](docs/CENARIOS-ONLINE-OFFLINE.md).
+
+---
+
+## Histórico da revisão anterior
+
 # Forno das Artes — candidato frontend para revisão
 
 Branch de revisão, sem implantação. Fonte: ZIP frontend de 03/11/2026. Veja [relatório e testes](docs/REVISAO-FRONTEND-2026-11-03.md), [operação sem internet](docs/FEIRA-SEM-INTERNET.md) e [evidências](evidencias/revisao-2026-11-03/COMPARATIVO.html).

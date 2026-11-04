@@ -1,0 +1,65 @@
+{
+  "checks": 8,
+  "checksPassed": [
+    "Ingredientes escuros, peso >=600, tamanho >=16px e contraste >=4,5:1 em 1920x1080",
+    "Devedores terracota escuro/texto claro >=4,5:1 sem mudar valor, revisão ou dados",
+    "Celular 390x844 sem rolagem horizontal nos ingredientes e na Gestão",
+    "TV em outra janela do MESMO perfil acompanha pagamento fictício por BroadcastChannel",
+    "Painel local acompanha pronto/entregue sem recarga; não é segundo computador",
+    "Oito contextos independentes NÃO compartilham IndexedDB: limite offline comprovado, não sincronização",
+    "Prévia autônoma por HTTP local troca perfil fictício, sem requisições externas ou IndexedDB",
+    "Nenhuma exceção JavaScript nos cenários de finalização"
+  ],
+  "ratios": {
+    "ingredients": [
+      {
+        "ratio": 8.863994956851911,
+        "fontSize": 18,
+        "weight": 650,
+        "color": "rgb(32, 63, 50)",
+        "background": "rgb(213, 230, 214)"
+      },
+      {
+        "ratio": 7.966678693341311,
+        "fontSize": 18,
+        "weight": 650,
+        "color": "rgb(86, 54, 45)",
+        "background": "rgb(244, 217, 202)"
+      },
+      {
+        "ratio": 8.863994956851911,
+        "fontSize": 18,
+        "weight": 650,
+        "color": "rgb(32, 63, 50)",
+        "background": "rgb(213, 230, 214)"
+      },
+      {
+        "ratio": 7.966678693341311,
+        "fontSize": 18,
+        "weight": 650,
+        "color": "rgb(86, 54, 45)",
+        "background": "rgb(244, 217, 202)"
+      }
+    ],
+    "debt": [
+      {
+        "ratio": 8.340074107602948,
+        "fontSize": 16,
+        "weight": 800,
+        "color": "rgb(255, 246, 232)",
+        "background": "rgb(113, 58, 48)"
+      },
+      {
+        "ratio": 8.340074107602948,
+        "fontSize": 38.4,
+        "weight": 800,
+        "color": "rgb(255, 246, 232)",
+        "background": "rgb(113, 58, 48)"
+      }
+    ]
+  },
+  "windowsHardwareTested": false,
+  "bankValidated": false,
+  "eightDevicesSynchronized": false,
+  "sameBrowserMonitorVerified": true
+}

@@ -1,2 +1,4 @@
 *.png binary
 *.pdf binary
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
