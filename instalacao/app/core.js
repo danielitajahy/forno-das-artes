@@ -20,8 +20,8 @@ export function availability(s, id, mode) {
 }
 export function priceOf(s, p, mode) { return p.price[mode] ?? s.prices[mode]; }
 const permissions = {
-  admin: '*', finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set'], cashier: ['order.create','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
-  kitchen: ['order.status']
+  admin: '*', presenter: [], seller: ['order.create'], finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set'], cashier: ['order.create','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
+  kitchen: ['order.status','production.record']
 };
 export function validateProduct(p) {
   assert(p && /^[a-zA-Z0-9_-]{1,64}$/.test(p.id), 'Identificador de sabor inválido.');
@@ -61,6 +61,8 @@ export function totals(s) {
 export function reduce(state, command, actor) {
   assert(actor?.id && permissions[actor.role], 'Entre com um operador autorizado.');
   assert(command && /^[0-9a-f-]{36}$/i.test(command.requestId || ''), 'Identificador da operação inválido.');
+  assert(permissions[actor.role] === '*' || permissions[actor.role].includes(command.type), 'Permissão insuficiente.');
+  assert(!actor.allowedCommands || actor.allowedCommands.includes(command.type), 'Operação não concedida a esta conta.');
   const replay = state.audit.find(a => a.requestId === command.requestId);
   if (replay) {
     assert(replay.command ? replay.command === JSON.stringify(command) : replay.type === command.type && replay.actor === actor.id, 'Identificador reutilizado para outra operação.');
@@ -80,6 +82,16 @@ export function reduce(state, command, actor) {
   const reason = () => assert(text(p.reason,500)&&p.reason.trim(),'Informe o motivo.');
   const event = x => ({...x,id:uid(),createdAt:now,actor:actor.id});
   switch(command.type) {
+    case 'pitch.settings': {
+      for(const k of ['initialInvestment','fixedCosts','otherSlice','otherWhole'])assert(p[k]===null||integer(p[k],0,100000000),'Valor de apresentação inválido.');
+      assert(p.feeBps===null||integer(p.feeBps,0,10000),'Percentual variável inválido.');
+      assert(typeof p.productionComplete==='boolean','Confirme a abrangência da produção.');
+      s.pitchSettings={initialInvestment:p.initialInvestment,fixedCosts:p.fixedCosts,otherSlice:p.otherSlice,otherWhole:p.otherWhole,feeBps:p.feeBps,productionComplete:p.productionComplete,updatedAt:now,updatedBy:actor.id};break;
+    }
+    case 'production.record': {
+      assert(s.menu.some(x=>x.id===p.productId)&&integer(p.pizzas,1,100000),'Informe sabor e número inteiro de pizzas de 35 cm.');reason();
+      s.production??=[];s.production.push(event({productId:p.productId,pizzas:p.pizzas,reason:p.reason}));break;
+    }
     case 'recipe.save': {
       assert(s.menu.some(x=>x.id===p.productId),'Sabor da ficha não encontrado.');validateRecipe(p.recipe);
       const r={...clone(p.recipe),productId:p.productId,revision:uid(),updatedAt:now,updatedBy:actor.id};
@@ -99,6 +111,7 @@ export function reduce(state, command, actor) {
       const i=s.menu.findIndex(x=>x.id===p.id);if(i<0)s.menu.push(clone(p));else s.menu[i]=clone(p);break;
     }
     case 'menu.delete': {
+      assert(!(s.production||[]).some(x=>x.productId===p.id),'Há produção: arquive o sabor.');
       assert(!recipeFor(s,p.id),'Há ficha técnica: arquive o sabor em vez de excluir.');
       assert(!s.orders.some(o=>o.lines.some(l=>l.productId===p.id)), 'Há histórico: arquive o sabor em vez de excluir.');
       assert(!s.waitlist.some(w=>w.productId===p.id),'Há lista de espera: arquive o sabor.');
@@ -323,6 +336,8 @@ export function validateState(s) {
   for(const o of s.orders)assert(s.refunds.filter(r=>r.orderId===o.id).reduce((n,r)=>n+r.amount,0)<=(o.paidAt?o.total:0),'Estorno superior ao recebido.');
   for(const r of s.refunds)assert(s.orders.some(o=>o.id===r.orderId&&o.status==='cancelado'&&o.paidAt),'Estorno sem cancelamento pago.');
   assert(s.cashSessions.filter(c=>!c.closedAt).length<=1,'Dois caixas abertos.');
+  if(s.pitchSettings!==undefined){const p=s.pitchSettings;for(const k of ['initialInvestment','fixedCosts','otherSlice','otherWhole'])assert(p[k]===null||integer(p[k],0,100000000),'Base de cálculo inválida.');assert((p.feeBps===null||integer(p.feeBps,0,10000))&&typeof p.productionComplete==='boolean','Premissas inválidas.');}
+  if(s.production!==undefined){assert(Array.isArray(s.production)&&s.production.length<=100000,'Produção inválida.');for(const p of s.production)assert(s.menu.some(x=>x.id===p.productId)&&integer(p.pizzas,1,100000)&&text(p.reason,500)&&!!p.reason.trim()&&text(p.actor,140)&&!!p.createdAt,'Produção sem origem.');}
   if(s.recipes!==undefined){assert(s.recipes&&typeof s.recipes==='object'&&!Array.isArray(s.recipes)&&Object.keys(s.recipes).length<=100,'Fichas inválidas.');for(const [id,r] of Object.entries(s.recipes)){assert(s.menu.some(p=>p.id===id)&&r.productId===id&&/^[0-9a-f-]{36}$/i.test(r.revision)&&text(r.updatedBy,140)&&!!r.updatedAt,'Ficha sem identidade válida.');validateRecipe(r);}}
   assert(s.paymentFees===undefined||Array.isArray(s.paymentFees)&&s.paymentFees.length<=100000,'Taxas inválidas.');
   for(const f of s.paymentFees||[]){const o=s.orders.find(x=>x.id===f.orderId);assert(o?.paidAt&&integer(f.amount,0,o.total)&&text(f.reason,300)&&f.reason.trim().length>=3&&text(f.actor,140)&&!!f.createdAt&&/^[0-9a-f-]{36}$/i.test(f.id),'Taxa sem conferência válida.');if(f.expenseId){const e=s.expenses.find(x=>x.id===f.expenseId);assert(e?.paid&&e.payerSource!=='person','Taxa vinculada sem despesa paga pelo caixa.');}}
