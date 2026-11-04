@@ -1,0 +1,14 @@
+✔ tests/core.test.mjs (89.471039ms)
+✔ tests/financeiro-reembolsos.test.mjs (55.753139ms)
+✔ tests/financial-results.test.mjs (154.074529ms)
+✔ tests/frontend-update.test.mjs (55.794699ms)
+✔ tests/pix-devedores-fila.test.mjs (50.321499ms)
+✔ tests/ui-visual.test.mjs (44.253364ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.900067

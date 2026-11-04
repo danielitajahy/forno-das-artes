@@ -1,3 +1,4 @@
+import {validateRecipe,recipeFor,catalogCost,roundEighth,validateCostSnapshot,calculateResults} from './finance-results.js';
 // Regras compartilhadas do Plano B. Valores monetários em centavos inteiros.
 export const clone = value => structuredClone(value);
 export const uid = () => crypto.randomUUID();
@@ -19,7 +20,7 @@ export function availability(s, id, mode) {
 }
 export function priceOf(s, p, mode) { return p.price[mode] ?? s.prices[mode]; }
 const permissions = {
-  admin: '*', finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save'], cashier: ['order.create','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
+  admin: '*', finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set'], cashier: ['order.create','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
   kitchen: ['order.status']
 };
 export function validateProduct(p) {
@@ -79,12 +80,26 @@ export function reduce(state, command, actor) {
   const reason = () => assert(text(p.reason,500)&&p.reason.trim(),'Informe o motivo.');
   const event = x => ({...x,id:uid(),createdAt:now,actor:actor.id});
   switch(command.type) {
+    case 'recipe.save': {
+      assert(s.menu.some(x=>x.id===p.productId),'Sabor da ficha não encontrado.');validateRecipe(p.recipe);
+      const r={...clone(p.recipe),productId:p.productId,revision:uid(),updatedAt:now,updatedBy:actor.id};
+      s.recipes??={};Object.defineProperty(s.recipes,p.productId,{value:r,writable:true,enumerable:true,configurable:true});break;
+    }
+    case 'payment.fee.set': {
+      const o=s.orders.find(x=>x.id===p.orderId);
+      assert(o?.paidAt&&integer(p.amount,0,o.total)&&p.verified===true,'Confira a taxa efetiva do pedido pago; zero só se confirmado.');
+      assert(text(p.reason,300)&&p.reason.trim().length>=3,'Informe a referência/motivo da conferência.');
+      const expenseId=p.expenseId||null;
+      if(expenseId){const e=s.expenses.find(x=>x.id===expenseId);assert(e?.paid&&e.payerSource!=='person','Vincule somente despesa paga pelo caixa.');const latest=new Map((s.paymentFees||[]).map(f=>[f.orderId,f]));latest.set(o.id,{amount:p.amount,expenseId});assert([...latest.values()].filter(f=>f.expenseId===expenseId).reduce((n,f)=>n+f.amount,0)<=e.amount,'Taxas vinculadas excedem a despesa.');}
+      s.paymentFees??=[];s.paymentFees.push(event({orderId:o.id,amount:p.amount,reason:p.reason,expenseId}));break;
+    }
     case 'menu.save': {
       validateProduct(p);
       assert(s.menu.length < 100 || s.menu.some(x=>x.id===p.id),'Limite de 100 sabores.');
       const i=s.menu.findIndex(x=>x.id===p.id);if(i<0)s.menu.push(clone(p));else s.menu[i]=clone(p);break;
     }
     case 'menu.delete': {
+      assert(!recipeFor(s,p.id),'Há ficha técnica: arquive o sabor em vez de excluir.');
       assert(!s.orders.some(o=>o.lines.some(l=>l.productId===p.id)), 'Há histórico: arquive o sabor em vez de excluir.');
       assert(!s.waitlist.some(w=>w.productId===p.id),'Há lista de espera: arquive o sabor.');
       assert(!['slice','whole'].some(m=>{const x=s.stock[p.id+':'+m];return x&&(x.onHand||x.reserved||x.sold);}), 'Zere por ajuste documentado o estoque antes de excluir.');
@@ -116,7 +131,8 @@ export function reduce(state, command, actor) {
         assert(!seen.has(k)&&integer(l.qty,1,99),'Quantidade inválida ou item duplicado.');seen.add(k);
         assert(availability(s,l.productId,l.mode)>=l.qty,'Estoque insuficiente: '+product.artistic);
         const x=stock(l.productId,l.mode);x.reserved+=l.qty;
-        return {productId:product.id,mode:l.mode,qty:l.qty,name:product.artistic||product.name,unitPrice:priceOf(s,product,l.mode),unitCost:product.cost[l.mode]};
+        const costSnapshot=catalogCost(s,product,l.mode);
+        return {productId:product.id,mode:l.mode,qty:l.qty,name:product.artistic||product.name,unitPrice:priceOf(s,product,l.mode),unitCost:costSnapshot.known?roundEighth(costSnapshot.eighthCents):product.cost[l.mode],costSnapshot};
       });
       s.sequence++;const o={id:'B-'+s.operationId.slice(0,8).toUpperCase()+'-'+String(s.sequence).padStart(4,'0'),idempotencyKey:p.idempotencyKey,requestLines:clone(p.lines),lines,total:lines.reduce((n,l)=>n+l.qty*l.unitPrice,0),payment:'PIX',status:'aguardando',createdAt:now,createdBy:actor.id,cashSessionId:s.cashSessions.find(c=>!c.closedAt).id};
       s.orders.push(o);break;
@@ -270,7 +286,7 @@ export function validateState(s) {
   const reserved={};
   for(const o of s.orders){
     assert(text(o.id,100)&&text(o.idempotencyKey,100)&&['aguardando','preparando','pronto','entregue','cancelado'].includes(o.status)&&o.payment==='PIX'&&Array.isArray(o.lines)&&o.lines.length>0,'Pedido inválido.');
-    let total=0;for(const l of o.lines){assert(s.menu.some(p=>p.id===l.productId)&&['slice','whole'].includes(l.mode)&&integer(l.qty,1,99)&&integer(l.unitPrice,1,1000000)&&integer(l.unitCost,0,1000000)&&text(l.name,120),'Item inválido.');total+=l.qty*l.unitPrice;if(o.status==='aguardando')reserved[l.productId+':'+l.mode]=(reserved[l.productId+':'+l.mode]||0)+l.qty;}
+    let total=0;for(const l of o.lines){assert(s.menu.some(p=>p.id===l.productId)&&['slice','whole'].includes(l.mode)&&integer(l.qty,1,99)&&integer(l.unitPrice,1,1000000)&&integer(l.unitCost,0,1000000)&&text(l.name,120),'Item inválido.');if(l.costSnapshot!==undefined)validateCostSnapshot(l.costSnapshot,l.mode);assert(!l.costSnapshot?.known||l.unitCost===roundEighth(l.costSnapshot.eighthCents),'Custo compatível divergente.');total+=l.qty*l.unitPrice;if(o.status==='aguardando')reserved[l.productId+':'+l.mode]=(reserved[l.productId+':'+l.mode]||0)+l.qty;}
     assert(total===o.total,'Total de pedido inconsistente.');assert(!['preparando','pronto','entregue'].includes(o.status)||!!o.paidAt,'Pedido de cozinha sem pagamento.');
   }
   assert(new Set(s.orders.map(o=>o.id)).size===s.orders.length && new Set(s.orders.map(o=>o.idempotencyKey)).size===s.orders.length,'Pedidos duplicados.');
@@ -307,5 +323,10 @@ export function validateState(s) {
   for(const o of s.orders)assert(s.refunds.filter(r=>r.orderId===o.id).reduce((n,r)=>n+r.amount,0)<=(o.paidAt?o.total:0),'Estorno superior ao recebido.');
   for(const r of s.refunds)assert(s.orders.some(o=>o.id===r.orderId&&o.status==='cancelado'&&o.paidAt),'Estorno sem cancelamento pago.');
   assert(s.cashSessions.filter(c=>!c.closedAt).length<=1,'Dois caixas abertos.');
+  if(s.recipes!==undefined){assert(s.recipes&&typeof s.recipes==='object'&&!Array.isArray(s.recipes)&&Object.keys(s.recipes).length<=100,'Fichas inválidas.');for(const [id,r] of Object.entries(s.recipes)){assert(s.menu.some(p=>p.id===id)&&r.productId===id&&/^[0-9a-f-]{36}$/i.test(r.revision)&&text(r.updatedBy,140)&&!!r.updatedAt,'Ficha sem identidade válida.');validateRecipe(r);}}
+  assert(s.paymentFees===undefined||Array.isArray(s.paymentFees)&&s.paymentFees.length<=100000,'Taxas inválidas.');
+  for(const f of s.paymentFees||[]){const o=s.orders.find(x=>x.id===f.orderId);assert(o?.paidAt&&integer(f.amount,0,o.total)&&text(f.reason,300)&&f.reason.trim().length>=3&&text(f.actor,140)&&!!f.createdAt&&/^[0-9a-f-]{36}$/i.test(f.id),'Taxa sem conferência válida.');if(f.expenseId){const e=s.expenses.find(x=>x.id===f.expenseId);assert(e?.paid&&e.payerSource!=='person','Taxa vinculada sem despesa paga pelo caixa.');}}
+  const latestFees=new Map((s.paymentFees||[]).map(f=>[f.orderId,f]));for(const e of s.expenses)assert([...latestFees.values()].filter(f=>f.expenseId===e.id).reduce((n,f)=>n+f.amount,0)<=e.amount,'Taxas vinculadas excedem a despesa.');
   return true;
 }
+export function financialResults(s){return calculateResults(s,totals(s));}

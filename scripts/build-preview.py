@@ -3,7 +3,7 @@ from pathlib import Path
 import json,re
 ROOT=Path(__file__).resolve().parents[1]
 def build():
-    sources={name:(ROOT/'app'/name).read_text() for name in ('core.js','seed.js','appearance.js')}
+    sources={name:(ROOT/'app'/name).read_text() for name in ('finance-results.js','core.js','seed.js','appearance.js','finance-ui.js')}
     sources['order-intent.js']='''let pending=null;export function readIntent(){return pending}export function saveIntent(_,p){pending=p}export function clearIntent(){pending=null}'''
     csv=(ROOT/'app/storage.js').read_text().split('// Neutralização de fórmulas')[1]
     csv='export function csv'+csv.split('export function csv',1)[1]
@@ -16,6 +16,10 @@ send('cash.open',{note:'CAIXA FICTICIO'});send('operation.resume',{});
 send('contribution.add',{name:'BENEFICIARIO FICTICIO',amount:5000});
 send('expense.add',{description:'DESPESA FICTICIA',amount:1500,paid:true});
 send('debt.add',{personName:'PESSOA FICTICIA',reason:'EXEMPLO VISUAL',date:'2026-11-03',amount:3500});
+send('recipe.save',{productId:'brasa',recipe:{diameterCm:35,slices:8,notes:'VALORES FICTICIOS DE DEMONSTRACAO',ingredients:[{name:'INSUMO FICTICIO - NAO E CUSTO REAL',quantityMilli:1000000,unit:'g',priceUnit:'kg',unitCostCents:2400}],packaging:{slice:50,whole:200}}});
+send('order.create',{lines:[{productId:'brasa',mode:'slice',qty:2}],idempotencyKey:uid()});
+const order=memory.orders.at(-1);send('order.pay',{id:order.id,verified:true});send('payment.fee.set',{orderId:order.id,amount:0,verified:true,reason:'TAXA ZERO EXPLICITAMENTE FICTICIA'});
+
 export class LocalStore{
  mode='offline';actor={...fake};db={close(){}};channel={close(){}};
  async init(){return this}async state(){return clone(memory)}async configured(){return true}
@@ -41,8 +45,8 @@ export async function sha(s){return Array.from(new Uint8Array(await crypto.subtl
     banner='''<aside id="preview-notice" style="position:sticky;top:0;z-index:9999;background:#713a30;color:#fff6e8;padding:12px;text-align:center;font:700 16px system-ui">PRÉVIA FICTÍCIA · sem banco, sem Pix real e sem dados de estudantes. Não informe dados reais.<br><label>Conferir perfil <select id="preview-role"><option value="admin">Administração fictícia</option><option value="cashier">Caixa fictício</option><option value="kitchen">Cozinha fictícia</option><option value="finance">Financeiro fictício</option></select></label><a href="#sabores" style="color:#fff6e8;margin:8px">Cardápio</a><a href="#gestao" style="color:#fff6e8;margin:8px">Gestão</a></aside>'''
     html=html.replace('<body>','<body>'+banner)
     # Módulos Blob permitem abrir o arquivo localmente, sem servidor ou CDN.
-    bootstrap='''const source=SOURCE,urls={};for(const name of ['core.js','seed.js','appearance.js','order-intent.js','storage.js','ui.js']){const code=source[name].replace(/from ['"]\\.\\/([^'"]+)['"]/g,(_,dep)=>'from '+JSON.stringify(urls[dep]));urls[name]=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));}await import(urls['ui.js']);document.getElementById('preview-role').addEventListener('change',e=>window.dispatchEvent(new CustomEvent('forno-preview-role',{detail:e.target.value})));'''.replace('SOURCE',json.dumps(sources,ensure_ascii=False).replace('</script','<\\/script'))
+    bootstrap='''const source=SOURCE,urls={};for(const name of ['finance-results.js','core.js','seed.js','appearance.js','order-intent.js','storage.js','finance-ui.js','ui.js']){const code=source[name].replace(/from ['"]\\.\\/([^'"]+)['"]/g,(_,dep)=>'from '+JSON.stringify(urls[dep]));urls[name]=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));}await import(urls['ui.js']);document.getElementById('preview-role').addEventListener('change',e=>window.dispatchEvent(new CustomEvent('forno-preview-role',{detail:e.target.value})));'''.replace('SOURCE',json.dumps(sources,ensure_ascii=False).replace('</script','<\\/script'))
     html=html.replace('</body>','<script type="module">'+bootstrap+'</script></body>')
-    (ROOT/'PREVIA_VISUAL.html').write_text(html)
-    return ROOT/'PREVIA_VISUAL.html'
+    (ROOT/'PREVIA_FINANCEIRA.html').write_text(html)
+    return ROOT/'PREVIA_FINANCEIRA.html'
 if __name__=='__main__':print(build())

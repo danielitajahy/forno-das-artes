@@ -60,7 +60,7 @@ export function styleManagement(){
     h.after(guide,hint);
   }
   const map={
-    'Recebimentos Pix':'sales','Pix devolvido':'sales','Devoluções pendentes':'sales','Receita líquida':'sales','Saldo total':'sales',
+    'Recebimentos menos devoluções (legado)':'sales','Saldo antes de taxas separadas (legado)':'sales','Resultado projetado (critério legado)':'reports','Projeção anterior de doação (antes de taxas separadas)':'reports','Recebimentos Pix':'sales','Pix devolvido':'sales','Devoluções pendentes':'sales','Receita líquida':'sales','Saldo total':'sales',
     'Gastos pagos':'costs','Gastos previstos + pagos':'costs','Aportes a devolver':'contributions','Reembolsos de compras pendentes':'costs','Obrigações com pessoas':'contributions',
     'Resultado projetado':'reports','Potencial para doação após obrigações':'reports'
   };

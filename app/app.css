@@ -169,3 +169,14 @@
 
 /* Alvos de toque no cardápio, sem mudança de preço ou estoque. */
 #lista-sabores .qty .btn{min-width:48px;min-height:48px}
+
+/* Painel gerencial: fluxo de caixa separado de margem, sem estilos na vitrine. */
+.financial-results{background:#f2e5cc;color:#203b30;border:2px solid #315c63;border-radius:16px;padding:1.1rem;margin:1.1rem 0;min-width:0}
+.financial-results h3,.financial-results h4{color:#254d3a}.financial-results h3{font-size:1.5rem}.financial-results p{line-height:1.6}
+.financial-results .results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.8rem}
+.financial-results .result-kpi{background:#fffaf2;border-left:4px solid #315c63;padding:1rem;border-radius:10px;min-width:0}.financial-results .result-kpi h4{font:700 1rem system-ui;margin:0 0 .6rem}.financial-results .result-kpi strong{font-size:1.4rem;color:#254d3a}.financial-results .result-kpi p{font-size:.85rem}
+.financial-results details{background:#fffaf2;color:#203b30}.financial-results summary{color:#254d3a}.financial-results .results-warning{background:#fff6dc;border-left:5px solid #8d5c19;padding:.9rem}
+.financial-results table{color:#203b30;min-width:650px;font-size:.9rem}.financial-results th{background:#e1e9df;color:#254d3a}.financial-results small{display:block;max-width:220px}.financial-results th,.financial-results td{padding:.65rem}
+.financial-results input,.financial-results select,.financial-results textarea{font:inherit;background:#fffdf8;color:#203b30;border:1px solid #6c7f73;border-radius:8px;min-height:46px;padding:.6rem;max-width:100%;width:100%}.financial-results input[type=checkbox]{width:24px;min-height:24px}
+.financial-results .recipe-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:.7rem;border:1px solid #6c7f73;border-radius:9px;padding:.9rem;margin:.8rem 0}.financial-results output{display:block;background:#e5eeee;padding:1rem;border-left:4px solid #315c63;line-height:1.6}.financial-results .btn{min-height:46px}.financial-results .btn.s{color:#254d3a;border-color:#254d3a}.financial-results .btn.p{background:#254d3a;color:#fffdf8;border-color:#254d3a}
+@media(max-width:500px){.financial-results{padding:.75rem}.financial-results .recipe-row{display:block}.financial-results h3{font-size:1.3rem}}

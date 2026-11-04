@@ -29,9 +29,9 @@ test('ingredientes dos cards públicos recebem cor própria de destaque',()=>{
 });
 
 test('cache de interface é atualizado sem apagar IndexedDB',()=>{
-  assert.match(html,/app\/app\.css\?v=20261104-finalizacao-v1/);
-  assert.match(html,/app\/ui\.js\?v=20261104-finalizacao-v1/);
-  assert.match(sw,/fda-dev-v2-20261104-finalizacao-v1/);
+  assert.match(html,/app\/app\.css\?v=20261104-financeiro-v1/);
+  assert.match(html,/app\/ui\.js\?v=20261104-financeiro-v1/);
+  assert.match(sw,/fda-dev-v2-20261104-financeiro-v1/);
   assert.match(sw,/caches\.delete\(k\)/);
   assert.match(server,/Cache-Control', 'no-store/);
   assert.doesNotMatch(sw,/indexedDB\.deleteDatabase/);

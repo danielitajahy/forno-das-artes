@@ -1,0 +1,14 @@
+PASS Painel aproveita lançamentos existentes e mostra custos ausentes sem criar dados
+PASS Ficha editável calcula gramas/kg, oito fatias e embalagem sem alterar custo legado ou estoque
+PASS Financeiro acessa painel/fichas, sem editar preços ou estoque
+PASS Pedido aguardando não vira receita; confirmação atualiza painel de outra aba automaticamente
+PASS Taxa zero só após conferência; despesas, aporte e reembolso ficam separados
+PASS Editar ficha/preços recalcula apenas custos/preços atuais e preserva fotografia da venda paga
+PASS Cancelamento pago retira venda válida, preserva obrigação e calcula perda sem retorno físico
+PASS Estorno parcial diminui caixa/obrigação sem criar lucro ou apagar venda histórica
+PASS Devolução de aporte e reembolso movimentam caixa sem repetir despesa/receita no resultado
+PASS Nova inteira usa preço futuro e embalagem correta; acumulado desconta perdas sem dupla contagem
+PASS Reabertura preserva fichas/histórico, celular sem overflow e CSV privado disponível
+PASS Visitante público não recebe o painel de Gestão
+PASS Nova prévia financeira é fictícia e em memória; a prévia dos totens não foi substituída
+PASS Nenhuma exceção JavaScript própria do aplicativo

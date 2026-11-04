@@ -11,3 +11,4 @@ exports/
 *.db
 forno-backup-*.json
 forno-relatorio-*.csv
+forno-resultados-*.csv
