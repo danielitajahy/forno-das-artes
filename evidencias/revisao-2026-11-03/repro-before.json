@@ -1,0 +1,17 @@
+{
+  "withoutPix": {
+    "message": "Configure a chave Pix em Gestão antes de registrar o pedido. Nenhum pedido foi criado.",
+    "orders": 0,
+    "reserved": 0
+  },
+  "withPix": {
+    "orders": 1,
+    "total": 2400,
+    "status": "aguardando",
+    "reserved": 2,
+    "available": 6
+  },
+  "cancelCash": {
+    "sessions": 1
+  }
+}

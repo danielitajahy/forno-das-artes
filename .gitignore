@@ -1,0 +1,13 @@
+__pycache__/
+node_modules/
+.env
+.env.*
+!.env.example
+PRIVADO_NAO_PUBLICAR/
+private/
+backups/
+exports/
+*.sqlite*
+*.db
+forno-backup-*.json
+forno-relatorio-*.csv

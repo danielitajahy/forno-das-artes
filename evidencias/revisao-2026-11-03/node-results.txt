@@ -1,0 +1,72 @@
+✔ novo sabor, edição, reordenação, modos e nutrição fornecida (5.723421ms)
+✔ exclusão sem histórico e arquivo com histórico imutável (1.775673ms)
+✔ preços gerais fatia e inteira e preços individuais preservam pedido antigo (1.118035ms)
+✔ pedido vários sabores calcula total no domínio e somente PIX (0.714852ms)
+✔ aguardando pagamento reserva, não entra na cozinha e exige crédito conferido (1.374602ms)
+✔ inteiras dentro do estoque e prevenção de compra excessiva (0.616067ms)
+✔ limite de venda também reserva saldo; ajuste não compromete reservas (1.439368ms)
+✔ perdas, reposição e disponibilidade por modalidade separada (0.472205ms)
+✔ lista consentida, reposição, confirmação manual e prevenção de aviso duplicado (1.361032ms)
+✔ produto arquivado não pode gerar aviso (0.878643ms)
+✔ conflito de edição e pedidos com mesma revisão: só um vence (0.608104ms)
+✔ repetição após timeout não duplica pedido e detecta reuso com itens diferentes (0.492385ms)
+✔ requestId repete confirmação sem nova cobrança nem audit duplicado (0.474098ms)
+✔ token requestId Pix não grava chave bancária em audit e repete seguro (0.194056ms)
+✔ senhas acima de 999 não truncam e namespaces de instalações são distintos (1.131796ms)
+✔ cancelamento não pago libera reserva sem receita (2.424227ms)
+✔ cancelamento pago documenta devolução e estoque, sem apagar recebimento (0.907515ms)
+✔ cancelamento após entrega permite devolver Pix sem repor produto consumido (0.683836ms)
+✔ despesa prevista pode ser paga e aporte devolvido individualmente (0.752327ms)
+✔ fechamento financeiro com diferença preservada (0.840827ms)
+✔ cozinha não pode confirmar Pix e caixa não pode alterar preços (0.551512ms)
+✔ validação de backup preserva reservas e bloqueia total adulterado (0.991209ms)
+✔ imagem SVG/script rejeitada, CSV neutraliza fórmulas (0.347712ms)
+✔ compra de R$250 paga por pessoa é despesa, não aporte e não saída de caixa até reembolso (0.60476ms)
+✔ compra por quilo usa valor unitário e peso para calcular total em centavos (0.388361ms)
+✔ reembolso exige confirmação e fica ligado a uma compra paga por pessoa (0.398967ms)
+✔ aportes de alunos e compras adiantadas são obrigações separadas sem duplicidade (0.302565ms)
+✔ legado sem dados de pagador permanece válido e não é reclassificado (0.12909ms)
+✔ compras previstas somente viram obrigação após pagamento por pessoa (0.196349ms)
+✔ campos e relatório detalhado existem na interface, sem expor registros automaticamente (0.551301ms)
+✔ financeiro registra aporte, beneficiário e devolução parcial sem duplicar venda (0.2854ms)
+✔ financeiro sem permissão de preço, estoque, vendas, pagamento ou dívida (0.212683ms)
+✔ financeiro confere reembolso realizado externamente (0.391146ms)
+✔ contrato IndexedDB mantém nome, versão e store, sem migração ou limpeza (0.330066ms)
+✔ intenção por aba preserva UUIDs e não armazena credenciais (0.473056ms)
+✖ cadastro de Pix individual, edição e proteção contra duplicidade (1.293052ms)
+✔ pendência de devedor soma saldo e aceita pagamentos parciais com confirmação (0.585842ms)
+✔ dados financeiros e chaves Pix não podem ser alterados por caixa/cozinha (0.21077ms)
+✔ backup legado ainda é válido sem coleções opcionais (0.148538ms)
+✔ interface contém cadastro, controle de cobrança e demonstração, mas não campos pessoais no publicView (0.545713ms)
+✔ criação e login incluem botão visível de mostrar/ocultar senha (0.144893ms)
+✔ botão do olho tem coluna própria e permanece visível em telas estreitas (0.064946ms)
+✔ ingredientes dos cards públicos recebem cor própria de destaque (0.048531ms)
+✔ cache de interface é atualizado sem apagar IndexedDB (0.10898ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 43
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.998576
+
+✖ failing tests:
+
+test at tests/pix-devedores-fila.test.mjs:7:1
+✖ cadastro de Pix individual, edição e proteção contra duplicidade (1.293052ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/forno-frontend-revisao-2026-11-03/tests/pix-devedores-fila.test.mjs:12:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /já cadastrada/,
+    operator: 'throws',
+    diff: 'simple'
+  }

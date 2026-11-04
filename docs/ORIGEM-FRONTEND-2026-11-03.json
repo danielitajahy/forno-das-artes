@@ -1,0 +1,24 @@
+{
+  "zip_sha256": "1e6d2f460d940917255009f50cfd393b904e7c01d5c1e3a5ebfc61d790de03d2",
+  "files": {
+    "sw.js": "3d80f32a35202d2b3caecbbe330cc8e9a66d65d56585f5366a4d5f6d3226ccbd",
+    "index.html": "8135bda39b4b5b20c1621e18979e62945292bccbabab9ce7337dc432c3af0fe7",
+    "manifest.webmanifest": "6dc48ff1c9b04aa6c23c991f6782cfcff36a78858a26cd263a540c1a1ef486fd",
+    "LEIA_PARA_CODEX.md": "f981d91fa135e854b009c4cf8d03830e88fcdba5b1fccc04341130a83d5ab55b",
+    "app/storage.js": "3559648bce23e4382ecce6cdac07fb16eb0e272d9450ac503b58c7e4d7697438",
+    "app/seed.js": "6c89e8ca6cfe2a91231d774fdf415f73a7cd2a56621ba39c9d46bcfd05a3619b",
+    "app/ui.js": "2aeb83c146eda23df99646781014e27572a16cd39e1ebd3e26189820502f95e2",
+    "app/app.css": "39465e1cc5a290b4dbb440cbfc93528e5ac4a6bf6585ff08ccfe1e1b90a90549",
+    "app/core.js": "e25f37f97826c4512e68cd2abbc35f0dd0f8c8712ae43eda0d7e41a2e0ecdc6d",
+    "app/appearance.js": "eff341e6188ff99d5618643ea847b8eebe48c3d1a0c12ac010e92af6ec2c9a59"
+  },
+  "database_file_packaged": false,
+  "source_files_unchanged": [
+    "app/core.js",
+    "app/storage.js",
+    "app/seed.js",
+    "app/app.css",
+    "app/appearance.js",
+    "manifest.webmanifest"
+  ]
+}

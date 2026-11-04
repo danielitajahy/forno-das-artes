@@ -1,0 +1,25 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Forno das Artes · Demonstração da Fila</title>
+<style>
+:root{--ouro:#d3a34a;--verde:#254d3a;--fundo:#10291f;--card:#193a2d;--creme:#f2e5cc;--terra:#c45d3c}
+*{box-sizing:border-box}body{margin:0;background:var(--fundo);font:500 16px system-ui,Arial;color:var(--creme)}main{max-width:1100px;margin:24px auto;padding:0 20px}
+header{padding:22px;background:#2a3c29;border-radius:15px;color:var(--creme);text-align:center;font-weight:800}small{color:var(--ouro)}h1{font-family:Georgia,serif;font-size:36px;margin:25px 0 10px}h2{font-size:16px;letter-spacing:.1em;text-align:center;color:var(--ouro);margin-bottom:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:24px 0}.column{background:var(--card);border:1px solid #365d48;border-radius:18px;min-height:280px;padding:22px}.column.pronto{background:#254d3a}.tickets{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.ticket{font-weight:800;font-size:24px;letter-spacing:.04em;background:#d3a34a;color:#10291f;border-radius:16px;padding:16px 20px}.pronto .ticket{background:#f2e5cc}.note{color:#ddcda8;font-size:14px;line-height:1.6}.controls{background:#f2e5cc;color:#254d3a;padding:20px;border-radius:18px}label{display:block;font-weight:700;margin:10px 0}select{padding:12px;background:white;color:#123325;border:1px solid #8da59a;border-radius:10px;font-size:16px;width:min(380px,100%)}button{border:0;border-radius:30px;background:#254d3a;color:white;padding:12px 18px;margin:6px 4px 4px 0;font-weight:700;cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}.warning{font-size:13px;color:#5d4b24}#status{font-weight:700}@media(max-width:630px){.grid{grid-template-columns:1fr}.ticket{font-size:19px}}
+</style></head><body><main>
+<header>FORNO DAS ARTES · FILA DE RETIRADA<br><small>DEMONSTRAÇÃO INTERATIVA — somente dados fictícios</small></header>
+<h1>Como o menu Fila funciona</h1><p>Esta página é apenas uma simulação. <strong>Não registra vendas, não altera estoque e não acessa dados reais.</strong></p>
+<section class="grid"><div class="column"><h2>PREPARANDO</h2><div id="preparando" class="tickets"></div></div><div class="column pronto"><h2>PRONTO PARA RETIRAR</h2><div id="pronto" class="tickets"></div></div></section>
+<section class="controls"><h2 style="color:#254d3a;text-align:left;margin:0 0 8px">Simule os passos da equipe</h2><p>As senhas exibidas são exemplos curtos. O identificador real do Plano B contém um código adicional para não repetir números.</p>
+<label for="order">Escolha um pedido fictício</label><select id="order"></select><div><button id="pay">1. Pix conferido → Preparando</button><button id="ready">2. Cozinha → Pronto</button><button id="deliver">3. Entregar → Sai da fila</button><button id="reset" style="background:#c45d3c">Reiniciar exemplo</button></div>
+<p id="status" role="status" aria-live="polite"></p><p class="warning">Pix real só é confirmado pelo caixa após conferir o crédito no banco. Apenas pedidos pagos entram na Fila pública; a senha desaparece ao ser marcada como entregue.</p></section>
+<p class="note">Na feira, abra o menu <strong>Fila</strong> ou a visualização <strong>#tv</strong> no mesmo navegador e endereço do notebook. O Plano B não sincroniza outros computadores/celulares automaticamente.</p>
+</main><script>
+'use strict';
+const initial=[{id:'B-0001',st:'aguardando'},{id:'B-0002',st:'pronto'},{id:'B-0003',st:'preparando'},{id:'B-0004',st:'pronto'}];
+let orders=structuredClone(initial);const $=s=>document.querySelector(s), mk=(o)=>{let e=document.createElement('div');e.className='ticket';e.textContent=o.id;return e};
+function render(){for(const st of ['preparando','pronto']){const d=$('#'+st);d.replaceChildren(...orders.filter(x=>x.st===st).map(mk));if(!d.children.length)d.textContent='—';}
+const sel=$('#order'),selid=sel.value;sel.replaceChildren(...orders.map(o=>{const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.id+' · '+({'aguardando':'aguardando Pix','preparando':'preparando','pronto':'pronto','entregue':'entregue'}[o.st]);return opt}));if(orders.some(o=>o.id===selid))sel.value=selid;
+const o=orders.find(x=>x.id===sel.value);$('#pay').disabled=o?.st!=='aguardando';$('#ready').disabled=o?.st!=='preparando';$('#deliver').disabled=o?.st!=='pronto';}
+$('#order').addEventListener('change',render);
+for(const [key,from,to,msg] of [['pay','aguardando','preparando','Pix fictício conferido: pedido entrou em Preparando.'],['ready','preparando','pronto','Cozinha marcou como Pronto: senha mudou de coluna.'],['deliver','pronto','entregue','Pedido entregue: senha saiu da fila pública.']]){$('#'+key).addEventListener('click',()=>{const o=orders.find(x=>x.id===$('#order').value);if(o?.st!==from)return;o.st=to;$('#status').textContent=msg;render()});}
+$('#reset').addEventListener('click',()=>{orders=structuredClone(initial);$('#status').textContent='Exemplo reiniciado.';render()});render();
+</script></body></html>

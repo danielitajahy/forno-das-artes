@@ -1,0 +1,8 @@
+{
+  "private_spreadsheet_or_database": false,
+  "env_file": false,
+  "literal_mp_token": false,
+  "fixtures_only": true,
+  "database_schema_changed": false,
+  "new_deploy_workflow": false
+}
