@@ -1,0 +1,27 @@
+FORNO DAS ARTES - CANDIDATO PARA CONFERENCIA EM 04/11/2026
+
+1. Extraia TODO o ZIP para uma pasta normal. Preserve as pastas antigas.
+2. Para CONFERIR O VISUAL, abra ABRIR_PREVIA_WINDOWS.cmd.
+   A previa abre no navegador: http://127.0.0.1:8870/PREVIA_VISUAL.html
+   E ficticia, sem banco. Nao informe dados reais. Nao registre vendas nela.
+3. Mantenha a janela do iniciador aberta. Se o navegador nao abrir, digite
+   o endereco acima. Para encerrar a previa, feche a janela do iniciador.
+4. O iniciador nao baixa o projeto, nao apaga dados e nao exige servidor
+   externo. Usa PowerShell do Windows. Se houver bloqueio da escola,
+   fotografe a mensagem e fale com o tecnico. Nao altere politicas globais.
+5. INICIAR_WINDOWS.cmd abre o aplicativo completo na porta operacional 8766.
+   NAO USE NO PERFIL OPERACIONAL ANTES DE BACKUP, VALIDACAO E APROVACAO.
+   Para ensaio, usar perfil separado com dados ficticios. Se Python nao
+   estiver disponivel, o iniciador usa o servidor nativo incluido.
+6. A janela mostra erros e permanece aberta. Porta ocupada nao e resolvida
+   mudando de porta ou limpando navegador. O programa nao mata outro servidor.
+7. Windows real/touch/impressora/Starlink ainda precisam dos testes de 06/11.
+   Os servidores foram testados em Linux; isso nao equivale a testar o CMD
+   por duplo clique no Windows 10/11.
+8. Segundo computador e oito celulares NAO sincronizam offline. So o mesmo
+   notebook/navegador/perfil compartilha a fila entre janelas (TV por HDMI).
+9. Dados recuperados e PINs nao acompanham o pacote. A copia privada ja
+   preparada deve ser validada antes de atualizar a operacao; nao excluir
+   novamente os dois pedidos de teste. Nada foi migrado neste pacote.
+
+Ver docs/INSTALACAO-TOTENS-04-11-2026.md e docs/CENARIOS-ONLINE-OFFLINE.md.

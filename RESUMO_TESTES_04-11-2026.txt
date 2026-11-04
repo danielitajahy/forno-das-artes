@@ -1,0 +1,18 @@
+RESULTADO REAL DO CANDIDATO DE CONFERENCIA
+
+- 44 testes Node: passaram.
+- 15 testes Python/integracao PowerShell: passaram.
+- 12 cenarios Chromium de regressao: passaram.
+- 8 cenarios Chromium adicionais: passaram.
+- Ingredientes: contraste 8,86:1 e 7,97:1; 16-18px, peso 650.
+- Devedores: terracota escuro e texto claro, contraste 8,34:1.
+- Celular 390x844 e Full HD 1920x1080: conferidos.
+- Pedido ficticio R$24: unico, reserva 2 de 8, livres 6.
+- Banco e PINs reais: nao acessados nem modificados.
+
+LIMITES: CMD por duplo clique em Windows 10/11 e PowerShell 5.1 nao foram
+executados aqui. O script PS real foi testado em PowerShell 7.4.6/Linux.
+Totem fisico, impressao, Starlink, oito vendedores sincronizados, segundo
+computador sincronizado, banco/Pix real e migracao: NAO HOMOLOGADOS.
+A previa externa por CDN nao pode ser verificada pelo proxy deste ambiente.
+Drive sem conexao: upload pendente. Nao houve merge/publicacao do site principal.

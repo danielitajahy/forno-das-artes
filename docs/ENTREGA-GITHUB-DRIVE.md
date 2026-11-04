@@ -1,3 +1,11 @@
+# Atualização para o prazo de 04/11/2026
+
+O candidato visual/iniciadores está no commit `6ec4a9e` da mesma branch. A prévia estática fictícia e o link externo proposto estão em [ACESSAR-PREVIA-04-11-2026.md](ACESSAR-PREVIA-04-11-2026.md). Funcionamento local testado; acesso ao CDN bloqueado pelo proxy e não verificado externamente.
+
+Drive segue sem conexão: não foi feito upload. A cópia privada preparada sem os dois pedidos de teste não foi acessada nem reprocessada. Abertura do PR pela API continua pendente do acesso apropriado; não houve merge ou substituição do site principal. Os registros abaixo são da entrega anterior.
+
+---
+
 # Entrega externa — estado verificado
 
 - Branch enviada: https://github.com/danielitajahy/forno-das-artes/tree/codex/frontend-feira-2026-11-03
