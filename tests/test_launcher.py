@@ -53,4 +53,7 @@ class Launcher(unittest.TestCase):
   def open_url(url):urls.append(url);event.set();return True
   with patch.object(m,'make_server',return_value=Server()),patch.object(m.webbrowser,'open',side_effect=open_url),contextlib.redirect_stdout(io.StringIO()):self.assertEqual(m.main(['--preview']),0)
   self.assertEqual(urls,['http://127.0.0.1:8870/PREVIA_VISUAL.html'])
+ def test_busy_preview_does_not_tell_user_to_stop_operational_server(self):
+  with patch.object(m,'make_server',side_effect=OSError('Porta ocupada')),contextlib.redirect_stderr(io.StringIO()) as err:self.assertEqual(m.main(['--preview']),1)
+  self.assertIn('8870',err.getvalue());self.assertIn('mantenha o servidor operacional 8766 intacto',err.getvalue())
 if __name__=='__main__':unittest.main()

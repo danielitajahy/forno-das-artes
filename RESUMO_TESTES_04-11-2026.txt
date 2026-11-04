@@ -1,7 +1,7 @@
 RESULTADO REAL DO CANDIDATO DE CONFERENCIA
 
 - 44 testes Node: passaram.
-- 15 testes Python/integracao PowerShell: passaram.
+- 16 testes Python/integracao PowerShell: passaram.
 - 12 cenarios Chromium de regressao: passaram.
 - 8 cenarios Chromium adicionais: passaram.
 - Ingredientes: contraste 8,86:1 e 7,97:1; 16-18px, peso 650.

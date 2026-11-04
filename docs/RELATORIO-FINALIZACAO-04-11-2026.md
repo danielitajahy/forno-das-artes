@@ -17,7 +17,7 @@ Continuação na branch **codex/frontend-feira-2026-11-03**, sem outro projeto, 
 | Verificação | Resultado real |
 | --- | --- |
 | Node: domínio, permissões, estoque, financeiro, backups e interface | **44 testes passaram**, zero falhas/skips na execução final |
-| Python e integração do iniciador nativo | **15 testes passaram**, incluindo HTTP real, recursos, privacidade, porta ocupada, modo prévia, abertura automática via mock e pré-verificação |
+| Python e integração do iniciador nativo | **16 testes passaram**, incluindo HTTP real, recursos, privacidade, porta ocupada, modo prévia, abertura automática via mock e pré-verificação |
 | Regressão Chromium completa | **12 cenários passaram**, usando o servidor PowerShell em loopback e dados fictícios |
 | Finalização Chromium | **8 cenários passaram**: visual desktop/mobile, estado preservado, painel entre abas, isolamento de oito contextos e prévia sem banco |
 | Ingredientes Full HD 1920×1080 | Verde **8,86:1**, marrom **7,97:1**, 18px/peso 650 |

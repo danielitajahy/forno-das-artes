@@ -1,5 +1,6 @@
 test_browser_opens_correct_origin (test_launcher.Launcher.test_browser_opens_correct_origin) ... ok
 test_busy_port_no_fallback_or_data_reset (test_launcher.Launcher.test_busy_port_no_fallback_or_data_reset) ... ok
+test_busy_preview_does_not_tell_user_to_stop_operational_server (test_launcher.Launcher.test_busy_preview_does_not_tell_user_to_stop_operational_server) ... ok
 test_head_body_empty (test_launcher.Launcher.test_head_body_empty) ... ok
 test_health_no_database_access (test_launcher.Launcher.test_health_no_database_access) ... ok
 test_html_and_js_served_from_packaged_files (test_launcher.Launcher.test_html_and_js_served_from_packaged_files) ... ok
@@ -15,6 +16,6 @@ test_native_preflight (test_windows_native.Native.test_native_preflight) ... ok
 test_native_preview_blocks_operational_resources (test_windows_native.Native.test_native_preview_blocks_operational_resources) ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 2.467s
+Ran 16 tests in 2.903s
 
 OK

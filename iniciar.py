@@ -64,7 +64,9 @@ def main(argv=None):
         server=make_server(port=8870 if args.preview else PORT,preview_only=args.preview)
     except (OSError,RuntimeError) as exc:
         print('Não foi possível iniciar o Forno das Artes: '+str(exc),file=sys.stderr)
-        print('Se a porta 8766 estiver ocupada, preserve o banco e feche o servidor anterior conscientemente. Não troque de porta ou limpe dados. Se abriu dentro do ZIP, extraia todos os arquivos.',file=sys.stderr);return 1
+        if args.preview:print('Prévia usa a porta 8870. Feche somente outra prévia nessa porta; mantenha o servidor operacional 8766 intacto. Se abriu dentro do ZIP, extraia todos os arquivos.',file=sys.stderr)
+        else:print('Se a porta 8766 estiver ocupada, preserve o banco e feche o servidor anterior conscientemente. Não troque de porta ou limpe dados. Se abriu dentro do ZIP, extraia todos os arquivos.',file=sys.stderr)
+        return 1
     url=f"http://127.0.0.1:{8870 if args.preview else PORT}/{'PREVIA_VISUAL.html' if args.preview else 'index.html'}"
     print('Forno das Artes — '+url,flush=True)
     print('Mantenha esta janela aberta. Ctrl+C encerra somente o servidor. Dados do navegador não são apagados.',flush=True)
