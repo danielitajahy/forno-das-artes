@@ -1,0 +1,25 @@
+FORNO DAS ARTES — CENTRAL PIX DE CONFERENCIA — COPIA ISOLADA DE TESTES
+
+NOVO: tres estados financeiros separados, oito vendedores simulados e conferencia manual.
+Sem API bancaria, sem Pix automatico, sem pagamentos reais nesta copia.
+
+1. Extraia TODO o ZIP em outra pasta. Preserve as entregas anteriores.
+2. Leia docs/GUIA-CENTRAL-PIX-TESTES.md para as contas FICTICIAS e o procedimento.
+3. Para banco compartilhado de testes: Node.js 24+ gratuito e
+   TESTAR_CENTRAL_PIX_COMPARTILHADA_WINDOWS.cmd
+   Abra http://127.0.0.1:8874/index.html?central-pix=teste#acesso
+4. Para apenas olhar o visual: iniciador estatico TESTAR_AVALIADORES_WINDOWS.cmd e
+   http://127.0.0.1:8872/PREVIA_CENTRAL_PIX.html
+   A previa usa somente memoria; NAO e o banco compartilhado.
+5. Nao importe dados ou PINs reais. Nao pague a chave ficticia da demonstracao.
+6. Ainda NAO esta homologado para oito celulares fisicos. O servidor escuta somente 127.0.0.1.
+   Rede, HTTPS, aparelhos e migracao dependem de validacao/autorizacao antes da operacao.
+
+Cliente informou que pagou NAO e credito confirmado. Vendedor nao confirma Pix.
+Somente Financeiro/Caixa autorizado confirma apos conferencia no extrato, na operacao futura.
+Referencia bancaria unica ou identificacao estavel da linha do extrato impede reutilizacao
+textual. Duas descricoes diferentes do mesmo credito exigem conferencia humana.
+
+Relatorio e testes: docs/CENTRAL-PIX-CONFERENCIA-04-11-2026.md
+Evidencias: evidencias/central-pix-2026-11-04
+Site publicado, Supabase, PINs reais e dados financeiros existentes nao foram alterados.

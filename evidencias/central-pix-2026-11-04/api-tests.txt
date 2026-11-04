@@ -1,0 +1,24 @@
+✔ API Pix: banco compartilhado recebe oito vendedores concorrentes sem perder pedidos/reservas (863.100796ms)
+✔ API Pix: servidor não confia em role enviada pelo cliente e bloqueia pagamento por vendedor (48.630853ms)
+✔ API Pix: sinalização própria não confirma banco e vendedor não altera outro pedido (135.325635ms)
+✔ API Pix: CSRF, origem indevida e usuário anônimo não podem gravar (82.158515ms)
+✔ API Pix: recusa valor errado e rota legada sem identificação de crédito (89.501223ms)
+✔ API Pix: duas confirmações concorrentes têm apenas um efeito e replay conserva o recibo (166.228914ms)
+✔ API Pix: transação normalizada não confirma outro pedido, mesmo em outra sessão (76.950278ms)
+✔ API Pix: divergência bloqueia confirmação até atestar crédito exato, histórico preservado (103.070707ms)
+✔ API Pix: cozinha recebe somente pagos; apresentador não confirma ou consulta cadastro individual (115.200592ms)
+✔ API Pix: perda da resposta após commit e revisão nova não duplica pedido (149.85401ms)
+✔ API Pix: reinício preserva arquivo e recibos, mas encerra sessões (151.869567ms)
+✔ API Pix: bloqueio administrativo revoga sessão sem apagar pedidos (113.807811ms)
+✔ API Pix: disputa pela última unidade compartilha reserva e não vende estoque inexistente (156.76676ms)
+✔ API Pix: não serve SQLite, código de usuários, backups ou caminho privado (6.9166ms)
+✔ API Pix: recusa arquivo existente de outra aplicação sem modificá-lo (1.060882ms)
+✔ API Pix: bloqueio de tentativas por PIN persiste no banco de testes (159.254617ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2434.539499

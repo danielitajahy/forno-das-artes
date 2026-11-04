@@ -1,0 +1,23 @@
+✔ Central: três estados separados sem usar declaração do cliente como receita (8.494805ms)
+✔ Central: vendedor não sinaliza pedido alheio nem confirma Pix (2.183394ms)
+✔ Central: informar novamente não duplica reserva nem evento (3.635271ms)
+✔ Central: financeiro exige concessão explícita mesmo quando o papel é financeiro (1.336968ms)
+✔ Central: não confirma por comprovante, sem extrato ou com valor divergente (1.439229ms)
+✔ Central: requer identificação estável, aceita linha manual quando banco não fornece referência (2.553178ms)
+✔ Central: mesma referência, inclusive normalizada, não confirma dois pedidos (2.667657ms)
+✔ Central: linha manual também é única e não pode ser reutilizada após cancelamento/estorno (1.775323ms)
+✔ Central: divergências são auditadas e só crédito exato resolvido libera cozinha (2.300767ms)
+✔ Central: não localizado não altera receita; nova conferência preserva anterior (1.356727ms)
+✔ Central: confirmação repetida e pedido cancelado não recebem novo crédito (2.106901ms)
+✔ Central: etiquetas e histórico de conferência não vazam ao público ou cozinha (3.720867ms)
+✔ Central: preço alterado não é aceito silenciosamente em retry do carrinho (0.99202ms)
+✔ Central: backup antigo não ganha novos campos por leitura e cálculo (3.421045ms)
+✔ Central: autoria fica registrada no pedido e não muda ao substituir nome do acesso (1.586946ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49.288713

@@ -1,0 +1,12 @@
+PASS Pix ausente explica o bloqueio no foco da tela; nenhuma reserva ou pedido
+PASS Duas fatias R$24, senha única, reserva 2/livres 6 e clique repetido sem duplicação
+PASS Aguardando Pix permanece fora da fila de preparação
+PASS Recarga exige relogin e preserva banco, financeiro, reservas e pedido
+PASS Confirmação estritamente fictícia percorre preparando/pronto/entregue
+PASS Cancelar abertura não abre caixa; OK abre uma única vez
+PASS Commit seguido de resposta perdida e recarga recupera mesma tentativa sem duplicar
+PASS Financeiro restrito registra devolução conferida externamente e preserva beneficiário/aporte
+PASS Contraste dos quatro ingredientes >=4,5:1; Devedores terracota com texto claro e celular sem overflow
+PASS Protocolo sem internet informa notebook/HDMI/papel e ausência de sincronização
+PASS Service worker permite recarga sem internet e preserva IndexedDB
+PASS Nenhuma exceção JavaScript do aplicativo

@@ -1,0 +1,23 @@
+{
+  "new": {
+    "core": 15,
+    "apiSQLite": 16,
+    "browserChecks": 17,
+    "total": 48
+  },
+  "regression": {
+    "node": 79,
+    "pythonPowerShell": 20,
+    "operationalBrowser": 12,
+    "financialBrowser": 14,
+    "evaluatorsBrowser": 20,
+    "total": 145
+  },
+  "allPassed": true,
+  "sellerIndependentBrowserContexts": 8,
+  "sharedSQLiteTested": true,
+  "realBankOrMoneyUsed": false,
+  "physicalEightPhonesHomologated": false,
+  "physicalWindowsTested": false,
+  "networkBinding": "127.0.0.1 only"
+}

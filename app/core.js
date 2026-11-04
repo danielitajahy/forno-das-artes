@@ -1,3 +1,4 @@
+import {normalizedReference,activePaymentIssue,pixCommands} from './pix-policy.js';
 import {validateRecipe,recipeFor,catalogCost,roundEighth,validateCostSnapshot,calculateResults} from './finance-results.js';
 // Regras compartilhadas do Plano B. Valores monetários em centavos inteiros.
 export const clone = value => structuredClone(value);
@@ -20,9 +21,15 @@ export function availability(s, id, mode) {
 }
 export function priceOf(s, p, mode) { return p.price[mode] ?? s.prices[mode]; }
 const permissions = {
-  admin: '*', presenter: [], seller: ['order.create'], finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set'], cashier: ['order.create','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
+  admin: '*', presenter: [], seller: ['order.create','order.reportPayment'], finance: ['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set','order.pay','payment.issue','payment.issue.resolve'], cashier: ['order.create','order.reportPayment','payment.issue','payment.issue.resolve','order.pay','order.cancel','refund.record','wait.add','wait.notify','wait.cancel','cash.open','cash.close'],
   kitchen: ['order.status','production.record']
 };
+export function authorizeCommand(actor,type){
+ assert(actor?.id&&permissions[actor.role],'Entre com um operador autorizado.');
+ assert(permissions[actor.role]==='*'||permissions[actor.role].includes(type),'Permissão insuficiente.');
+ assert(!actor.allowedCommands||actor.allowedCommands.includes(type),'Operação não concedida a esta conta.');
+ if(actor.role==='finance'&&pixCommands.includes(type))assert(actor.allowedCommands?.includes(type),'Permissão insuficiente: conferência Pix exige autorização individual explícita.');
+}
 export function validateProduct(p) {
   assert(p && /^[a-zA-Z0-9_-]{1,64}$/.test(p.id), 'Identificador de sabor inválido.');
   for (const k of ['name','artistic','description','ingredients']) assert(text(p[k], k === 'description' || k === 'ingredients' ? 3000 : 120) && (k !== 'name' || p[k].trim()), 'Texto de produto inválido: ' + k);
@@ -59,7 +66,7 @@ export function totals(s) {
     contributionsDue:contributions-returned};
 }
 export function reduce(state, command, actor) {
-  assert(actor?.id && permissions[actor.role], 'Entre com um operador autorizado.');
+  authorizeCommand(actor,command?.type);
   assert(command && /^[0-9a-f-]{36}$/i.test(command.requestId || ''), 'Identificador da operação inválido.');
   assert(permissions[actor.role] === '*' || permissions[actor.role].includes(command.type), 'Permissão insuficiente.');
   assert(!actor.allowedCommands || actor.allowedCommands.includes(command.type), 'Operação não concedida a esta conta.');
@@ -148,15 +155,43 @@ export function reduce(state, command, actor) {
         return {productId:product.id,mode:l.mode,qty:l.qty,name:product.artistic||product.name,unitPrice:priceOf(s,product,l.mode),unitCost:costSnapshot.known?roundEighth(costSnapshot.eighthCents):product.cost[l.mode],costSnapshot};
       });
       s.sequence++;const o={id:'B-'+s.operationId.slice(0,8).toUpperCase()+'-'+String(s.sequence).padStart(4,'0'),idempotencyKey:p.idempotencyKey,requestLines:clone(p.lines),lines,total:lines.reduce((n,l)=>n+l.qty*l.unitPrice,0),payment:'PIX',status:'aguardando',createdAt:now,createdBy:actor.id,cashSessionId:s.cashSessions.find(c=>!c.closedAt).id};
+      if(p.quotedTotal!==undefined)assert(p.quotedTotal===o.total,'Preço alterado: atualize e confira o carrinho antes de registrar.');
+      if(text(actor.name,140)&&actor.name?.trim())o.createdByName=actor.name;
       s.orders.push(o);break;
+    }
+    case 'order.reportPayment': {
+      const o=order();assert(o.status==='aguardando'&&!o.paidAt,'Pedido não está aguardando pagamento.');
+      assert(actor.role!=='seller'||o.createdBy===actor.id,'Vendedor só informa pagamento de seu próprio pedido.');
+      if(o.paymentReportedAt)return state;
+      o.paymentReportedAt=now;o.paymentReportedBy=actor.id;break;
+    }
+    case 'payment.issue': {
+      const o=order();assert(o.status==='aguardando'&&!o.paidAt,'Conferência exige pedido pendente.');
+      assert(['amount_mismatch','not_found'].includes(p.kind),'Sinalização inválida.');
+      assert(text(p.note||'',300),'Observação muito longa.');
+      assert(p.kind==='not_found'?p.observedAmount===null:integer(p.observedAmount,0,100000000)&&p.observedAmount!==o.total,'Informe valor divergente ou pagamento não localizado.');
+      o.paymentReviews??=[];for(const x of o.paymentReviews)if(!x.resolvedAt){x.resolvedAt=now;x.resolvedBy=actor.id;x.resolution='Substituída por nova conferência';}
+      o.paymentReviews.push(event({kind:p.kind,observedAmount:p.observedAmount,note:p.note||''}));break;
+    }
+    case 'payment.issue.resolve': {
+      const o=order(),issue=activePaymentIssue(o);assert(o.status==='aguardando'&&issue,'Não há divergência ativa neste pedido pendente.');reason();
+      issue.resolvedAt=now;issue.resolvedBy=actor.id;issue.resolution=p.reason;break;
     }
     case 'order.pay': {
       const o=order();assert(o.status==='aguardando'&&!o.paidAt,'Pagamento já confirmado ou pedido cancelado.');
       assert(p.verified===true,'Confira o crédito na conta bancária; print não comprova recebimento.');
+      const reference=String(p.reference||'').trim(),statementEntry=String(p.statementEntry||'').trim();
+      assert(text(reference,200)&&text(statementEntry,200),'Identificação da transação muito longa.');
+      if(p.central===true){assert(reference||statementEntry,'Informe a referência bancária ou identificação única da linha do extrato.');assert(p.receivedAmount===o.total,'Valor conferido diverge do pedido: sinalize e resolva antes de confirmar.');}
+      const keys=[...(reference?['BANK:'+normalizedReference(reference)]:[]),...(statementEntry?['ENTRY:'+normalizedReference(statementEntry)]:[])];
+      assert(!s.orders.some(x=>x.id!==o.id&&x.paidAt&&keys.some(k=>(x.bankReceiptKeys||[]).includes(k)||(k.startsWith('BANK:')&&x.paymentReference&&k==='BANK:'+normalizedReference(x.paymentReference)))),'Transação já vinculada a outro pedido, inclusive cancelado. Não confirme duas vezes.');
+      const issue=activePaymentIssue(o);assert(!issue||p.resolveIssue===true,'Existe divergência ativa. Resolva após conferir o extrato antes de confirmar.');
+      if(issue){issue.resolvedAt=now;issue.resolvedBy=actor.id;issue.resolution='Crédito exato conferido e confirmado';}
       const c=s.cashSessions.find(x=>!x.closedAt);assert(c,'Abra o caixa para confirmar o recebimento.');
       for(const l of o.lines){const x=stock(l.productId,l.mode);assert(x.reserved>=l.qty&&x.onHand>=l.qty,'Reserva inconsistente.');x.reserved-=l.qty;x.onHand-=l.qty;x.sold+=l.qty;if(x.limit!==null)x.limit=Math.max(0,x.limit-l.qty);}
       assert(text(p.reference||'',200),'Referência bancária longa.');
-      Object.assign(o,{status:'preparando',paidAt:now,paidBy:actor.id,paidAmount:o.total,paymentReference:p.reference||'',paymentSessionId:c.id});break;
+      if(text(actor.name,140)&&actor.name?.trim())o.paidByName=actor.name;
+      Object.assign(o,{status:'preparando',paidAt:now,paidBy:actor.id,paidAmount:o.total,paymentReference:reference,paymentStatementEntry:statementEntry,bankReceiptKeys:keys,bankCheckSource:p.central===true?'central-manual':'legacy-manual',paymentSessionId:c.id});break;
     }
     case 'order.status': {
       const o=order();assert(o.paidAt&&((o.status==='preparando'&&p.status==='pronto')||(o.status==='pronto'&&p.status==='entregue')),'Transição inválida: pagamento deve ser confirmado primeiro.');o.status=p.status;o.updatedAt=now;o.updatedBy=actor.id;break;
@@ -299,6 +334,9 @@ export function validateState(s) {
   const reserved={};
   for(const o of s.orders){
     assert(text(o.id,100)&&text(o.idempotencyKey,100)&&['aguardando','preparando','pronto','entregue','cancelado'].includes(o.status)&&o.payment==='PIX'&&Array.isArray(o.lines)&&o.lines.length>0,'Pedido inválido.');
+    if(o.paymentReportedAt!==undefined)assert(text(o.paymentReportedAt,50)&&text(o.paymentReportedBy,140),'Informação de pagamento inválida.');
+    if(o.bankReceiptKeys!==undefined){assert(Array.isArray(o.bankReceiptKeys)&&o.bankReceiptKeys.length<=2&&o.bankReceiptKeys.every(k=>text(k,220)&&/^(BANK|ENTRY):.+/.test(k)),'Identificadores bancários inválidos.');if(o.bankCheckSource==='central-manual')assert(o.paidAt&&o.bankReceiptKeys.length>0,'Confirmação central sem identificação do crédito.');for(const k of o.bankReceiptKeys)assert(!s.orders.some(x=>x.id!==o.id&&x.paidAt&&((x.bankReceiptKeys||[]).includes(k)||(k.startsWith('BANK:')&&x.paymentReference&&k==='BANK:'+normalizedReference(x.paymentReference)))),'Transação bancária duplicada.');}
+    if(o.paymentReviews!==undefined){assert(Array.isArray(o.paymentReviews)&&o.paymentReviews.length<=100000,'Conferências inválidas.');for(const x of o.paymentReviews)assert(['amount_mismatch','not_found'].includes(x.kind)&&text(x.note,300)&&text(x.actor,140)&&!!x.createdAt&&(x.kind==='not_found'?x.observedAmount===null:integer(x.observedAmount,0,100000000)&&x.observedAmount!==o.total),'Divergência inválida.');assert(o.paymentReviews.filter(x=>!x.resolvedAt).length<=1,'Divergências ativas duplicadas.');}
     let total=0;for(const l of o.lines){assert(s.menu.some(p=>p.id===l.productId)&&['slice','whole'].includes(l.mode)&&integer(l.qty,1,99)&&integer(l.unitPrice,1,1000000)&&integer(l.unitCost,0,1000000)&&text(l.name,120),'Item inválido.');if(l.costSnapshot!==undefined)validateCostSnapshot(l.costSnapshot,l.mode);assert(!l.costSnapshot?.known||l.unitCost===roundEighth(l.costSnapshot.eighthCents),'Custo compatível divergente.');total+=l.qty*l.unitPrice;if(o.status==='aguardando')reserved[l.productId+':'+l.mode]=(reserved[l.productId+':'+l.mode]||0)+l.qty;}
     assert(total===o.total,'Total de pedido inconsistente.');assert(!['preparando','pronto','entregue'].includes(o.status)||!!o.paidAt,'Pedido de cozinha sem pagamento.');
   }

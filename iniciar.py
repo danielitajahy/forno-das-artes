@@ -8,7 +8,7 @@ import argparse,json,sys,threading,webbrowser
 
 ROOT=Path(__file__).resolve().parent
 PORT=8766
-REQUIRED=('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js','app/evaluators.js','app/access-ui.js')
+REQUIRED=('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js','app/evaluators.js','app/access-ui.js','app/pix-policy.js','app/central-pix-ui.js','app/shared-pix-store.js')
 
 def check_package(root=ROOT):
     missing=[name for name in REQUIRED if not(root/name).is_file()]
@@ -19,7 +19,7 @@ def allowed_path(path):
     path=unquote(urlsplit(path).path)
     parts=path.strip('/').split('/')
     if any(x in ('..','.') or x.startswith('.') for x in parts) or '\\' in path:return False
-    if path in ('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):return True
+    if path in ('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html','/PREVIA_CENTRAL_PIX.html'):return True
     suffix=Path(path).suffix.lower()
     return (parts[0]=='app' and suffix in ('.js','.css')) or (parts[0] in ('docs','plano-c','evidencias') and suffix in ('.md','.html','.pdf','.png','.json','.txt'))
 
@@ -37,12 +37,12 @@ class Handler(SimpleHTTPRequestHandler):
         if urlsplit(self.path).path=='/_forno_health':
             raw=json.dumps({'application':'forno-das-artes','static_only':True,'database_changed':False}).encode()
             self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw);return
-        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):self.send_error(404);return
+        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html','/PREVIA_CENTRAL_PIX.html'):self.send_error(404);return
         if self.preview_only and urlsplit(self.path).path=='/':self.path='/PREVIA_VISUAL.html'
         if not allowed_path(self.path):self.send_error(404);return
         super().do_GET()
     def do_HEAD(self):
-        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):self.send_error(404);return
+        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html','/PREVIA_CENTRAL_PIX.html'):self.send_error(404);return
         if self.preview_only and urlsplit(self.path).path=='/':self.path='/PREVIA_VISUAL.html'
         if not allowed_path(self.path):self.send_error(404);return
         super().do_HEAD()

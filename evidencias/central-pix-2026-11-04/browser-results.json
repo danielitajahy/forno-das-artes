@@ -1,0 +1,28 @@
+{
+  "checks": 17,
+  "checksPassed": [
+    "Oito contextos independentes autenticados no servidor; nenhum usa IndexedDB para pedidos",
+    "Oito vendedores registram simultaneamente: oito senhas únicas e cada vendedor consulta somente seu pedido",
+    "Central exclusiva exibe senha, R$12, horário e vendedor dos oito pedidos; nenhuma receita antes do crédito confirmado",
+    "Declaração de pagamento chega ao Financeiro por banco compartilhado; continua aguardando e sem liberação para cozinha",
+    "Vendedor não vê tela financeira e chamada direta com seu cookie recebe 403",
+    "Um clique após conferência registra responsável, horário e referência; somente um pedido passa a pago/preparando",
+    "Cozinha e fila recebem só o pedido efetivamente confirmado; outras sessões enxergam a atualização",
+    "Mesma transação normalizada é bloqueada no segundo pedido, sem receita ou saída de estoque duplicada",
+    "Divergência de valor preserva pedido, reserva e histórico, sem confirmar banco",
+    "Valor divergente não é confirmado; crédito exato após resolução entra uma vez, sem apagar divergência anterior",
+    "Pagamento não localizado pode ser resolvido com crédito exato e identificação manual estável quando falta referência bancária",
+    "Central legível em celular, avisa ausência de homologação física e não trata comprovante como crédito",
+    "Visitante sem sessão não recebe pedidos pendentes nem controles financeiros",
+    "Recarga do navegador conserva pedidos, conferências e estado no servidor, sem importar base local",
+    "Prévia independente mostra oito pedidos fictícios somente em memória, sem importar dados ou acessar SQLite",
+    "Servidor indisponível não cria banco local nem troca para IndexedDB; sem modo de venda paralelo silencioso",
+    "Nenhuma exceção JavaScript própria nos cenários novos"
+  ],
+  "independentSellerContexts": 8,
+  "sharedSQLite": true,
+  "indexedDBUsed": false,
+  "physicalPhonesHomologated": false,
+  "bankIntegration": false,
+  "allDataFictitious": true
+}

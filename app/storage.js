@@ -10,21 +10,21 @@ async function passwordHash(password,salt) {
   const b=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:new TextEncoder().encode(salt),iterations:210000},k,256);
   return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
 }
-export const FINANCE_COMMANDS=['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set'];
+export const FINANCE_COMMANDS=['expense.add','expense.pay','expense.reimburse','contribution.add','return.add','person.save','recipe.save','payment.fee.set','order.pay','payment.issue','payment.issue.resolve'];
 const PIN_ROLES=['admin','finance','presenter','seller','kitchen'];
 const needsPassword=role=>['admin','finance','presenter'].includes(role);
 function publicState(s){return {version:2,revision:s.revision,role:'public',paused:s.paused,prices:clone(s.prices),pix:clone(s.pix),
  menu:s.menu.filter(p=>p.active&&!p.archived).map(p=>{const x=clone(p);delete x.cost;return x;}),
  stock:Object.fromEntries(s.menu.flatMap(p=>['slice','whole'].map(m=>{const x=s.stock[p.id+':'+m];return [p.id+':'+m,{available:x?Math.max(0,Math.min(x.onHand-x.reserved,x.limit===null?Infinity:x.limit-x.reserved)):0}];}))),
  orders:s.orders.filter(o=>['preparando','pronto'].includes(o.status)).map(o=>({id:o.id,status:o.status,createdAt:o.createdAt}))};}
-function project(s,actor){
- if(['admin','finance'].includes(actor?.role))return clone(s);
+export function project(s,actor,identities={}){
+ if(['admin','finance'].includes(actor?.role)){const v=clone(s);v.orders=v.orders.map(o=>({...o,sellerName:o.createdByName||identities[o.createdBy]||o.createdBy}));return v;}
  const view=publicState(s);if(!actor)return view;view.role=actor.role;
  if(actor.role==='presenter'){view.pix={key:'',recipient:'',qr:''};view.evaluatorReport=evaluatorReport(s);}
- if(['seller','kitchen'].includes(actor.role)){
+ if(['seller','kitchen','cashier'].includes(actor.role)){
   view.publicQueue=clone(view.orders);
-  const orders=actor.role==='seller'?s.orders.filter(o=>o.createdBy===actor.id):s.orders.filter(o=>o.paidAt&&['preparando','pronto'].includes(o.status));
-  view.orders=orders.map(o=>({id:o.id,status:o.status,createdAt:o.createdAt,paidAt:o.paidAt,createdBy:o.createdBy,...(actor.role==='seller'?{total:o.total,idempotencyKey:o.idempotencyKey}:{}),lines:o.lines.map(l=>({productId:l.productId,name:l.name,mode:l.mode,qty:l.qty,...(actor.role==='seller'?{unitPrice:l.unitPrice}:{})}))}));view.cashSessions=[];
+  const orders=actor.role==='cashier'?s.orders:actor.role==='seller'?s.orders.filter(o=>o.createdBy===actor.id):s.orders.filter(o=>o.paidAt&&['preparando','pronto'].includes(o.status));
+  view.orders=orders.map(o=>({id:o.id,status:o.status,createdAt:o.createdAt,paidAt:o.paidAt,createdBy:o.createdBy,...(['seller','cashier'].includes(actor.role)?{total:o.total,idempotencyKey:o.idempotencyKey,paymentReportedAt:o.paymentReportedAt,paymentIssue:(o.paymentReviews||[]).filter(x=>!x.resolvedAt).at(-1)?.kind}:{}),...(actor.role==='cashier'?{sellerName:o.createdByName||identities[o.createdBy]||o.createdBy,paymentReviews:clone(o.paymentReviews||[]),paymentReference:o.paymentReference,paymentStatementEntry:o.paymentStatementEntry,paidBy:o.paidBy,paidByName:o.paidByName,bankCheckSource:o.bankCheckSource}:{}),lines:o.lines.map(l=>({productId:l.productId,name:l.name,mode:l.mode,qty:l.qty,...(['seller','cashier'].includes(actor.role)?{unitPrice:l.unitPrice}:{})}))}));view.cashSessions=actor.role==='cashier'?s.cashSessions.filter(c=>!c.closedAt).map(c=>({id:c.id,openedAt:c.openedAt,openedBy:c.openedBy})):[];
  }
  return view;
 }
@@ -44,11 +44,12 @@ export class LocalStore {
   const get=key=>os?request(os.get(key)):this.#read(key),session=this.#session;
   if(session.accountId){const vault=await get('access-v1'),u=vault?.users.find(u=>u.id===session.accountId);
    if(!u?.enabled||u.version!==session.version){this.#session=null;return null;}
-   return {id:u.id,role:u.role,...(u.role==='finance'?{allowedCommands:[...u.permissions]}:{})};
+   return {id:u.id,name:u.name,role:u.role,...(u.role==='finance'?{allowedCommands:[...u.permissions]}:{})};
   }
   const c=await get(session.legacyKey);if(c?.hash!==session.hash){this.#session=null;return null;}return clone(session.actor);
  }
- async state(){const actor=await this.#resolve();return project(await this.#read('state'),actor);}
+ async #projection(s,actor){const v=await this.#read('access-v1');return project(s,actor,Object.fromEntries((v?.users||[]).map(u=>[u.id,u.name])));}
+ async state(){const actor=await this.#resolve();return this.#projection(await this.#read('state'),actor);}
  async configured(){return !!await this.#read('credentials');}
  async setup(name,password){
   assert(typeof name==='string'&&name.trim()&&name.length<=100&&typeof password==='string'&&password.length>=10,'Informe nome e senha local com pelo menos 10 caracteres.');
@@ -117,7 +118,7 @@ export class LocalStore {
  }
  async command(command){
   const tx=this.db.transaction('data','readwrite'),ended=done(tx),os=tx.objectStore('data');
-  try{const actor=await this.#resolve(os);const s=reduce(await request(os.get('state')),command,actor);os.put(s,'state');await ended;this.channel?.postMessage('updated');return project(s,actor);}
+  try{const actor=await this.#resolve(os);const s=reduce(await request(os.get('state')),command,actor);os.put(s,'state');await ended;this.channel?.postMessage('updated');return this.#projection(s,actor);}
   catch(e){try{tx.abort();}catch{}await ended.catch(()=>{});throw e;}
  }
  async evaluatorState(){assert(['admin','finance','presenter'].includes((await this.#resolve())?.role),'Consulta não autorizada.');return evaluatorReport(await this.#read('state'));}

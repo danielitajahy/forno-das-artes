@@ -1,0 +1,17 @@
+PASS Oito contextos independentes autenticados no servidor; nenhum usa IndexedDB para pedidos
+PASS Oito vendedores registram simultaneamente: oito senhas únicas e cada vendedor consulta somente seu pedido
+PASS Central exclusiva exibe senha, R$12, horário e vendedor dos oito pedidos; nenhuma receita antes do crédito confirmado
+PASS Declaração de pagamento chega ao Financeiro por banco compartilhado; continua aguardando e sem liberação para cozinha
+PASS Vendedor não vê tela financeira e chamada direta com seu cookie recebe 403
+PASS Um clique após conferência registra responsável, horário e referência; somente um pedido passa a pago/preparando
+PASS Cozinha e fila recebem só o pedido efetivamente confirmado; outras sessões enxergam a atualização
+PASS Mesma transação normalizada é bloqueada no segundo pedido, sem receita ou saída de estoque duplicada
+PASS Divergência de valor preserva pedido, reserva e histórico, sem confirmar banco
+PASS Valor divergente não é confirmado; crédito exato após resolução entra uma vez, sem apagar divergência anterior
+PASS Pagamento não localizado pode ser resolvido com crédito exato e identificação manual estável quando falta referência bancária
+PASS Central legível em celular, avisa ausência de homologação física e não trata comprovante como crédito
+PASS Visitante sem sessão não recebe pedidos pendentes nem controles financeiros
+PASS Recarga do navegador conserva pedidos, conferências e estado no servidor, sem importar base local
+PASS Prévia independente mostra oito pedidos fictícios somente em memória, sem importar dados ou acessar SQLite
+PASS Servidor indisponível não cria banco local nem troca para IndexedDB; sem modo de venda paralelo silencioso
+PASS Nenhuma exceção JavaScript própria nos cenários novos

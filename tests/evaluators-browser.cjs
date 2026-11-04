@@ -1,6 +1,6 @@
 // Novos testes desta entrega. Apenas dados fictícios em contexto novo e origem 8826.
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs');
-const base=process.env.FDA_TEST_BASE||'http://127.0.0.1:8826/',out='evidencias/avaliadores-2026-11-04/';fs.mkdirSync(out,{recursive:true});
+const base=process.env.FDA_TEST_BASE||'http://127.0.0.1:8826/',out=process.env.FDA_TEST_OUT||'evidencias/avaliadores-2026-11-04/';fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});const checks=[],errors=[];const mark=s=>{checks.push(s);console.log('PASS',s)};const ctx=await browser.newContext({viewport:{width:1440,height:1000}});const p=await ctx.newPage();p.setDefaultTimeout(15000);p.on('pageerror',e=>errors.push(e.message));
 try{
  await p.goto(base);await p.evaluate(async()=>{const {LocalStore}=await import('./app/storage.js'),{uid}=await import('./app/core.js');window.fixtureAdmin=await new LocalStore().init();const a=window.fixtureAdmin;await a.setup('ADMIN_FICTICIO','SENHA-ADMIN-FICTICIA');window.send=async(type,payload={})=>a.command({type,payload,expectedRevision:(await a.state()).revision,requestId:uid()});

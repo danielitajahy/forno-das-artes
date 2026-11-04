@@ -9,7 +9,7 @@ const sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 const server=readFileSync(new URL('../iniciar.py',import.meta.url),'utf8');
 
 test('criação e login incluem botão visível de mostrar/ocultar senha',()=>{
-  assert.equal((ui.match(/input\('password'/g)||[]).length,4);
+  assert.equal((ui.match(/input\('password'/g)||[]).length,5);
   assert.match(ui,/class="password-toggle" data-action="toggle-password"/);
   assert.match(ui,/password-toggle-text/);
   assert.match(ui,/field\.type=show\?'text':'password'/);
@@ -29,9 +29,9 @@ test('ingredientes dos cards públicos recebem cor própria de destaque',()=>{
 });
 
 test('cache de interface é atualizado sem apagar IndexedDB',()=>{
-  assert.match(html,/app\/app\.css\?v=20261104-avaliadores-v1/);
-  assert.match(html,/app\/ui\.js\?v=20261104-avaliadores-v1/);
-  assert.match(sw,/fda-dev-v2-20261104-avaliadores-v1/);
+  assert.match(html,/app\/app\.css\?v=20261104-central-pix-v1/);
+  assert.match(html,/app\/ui\.js\?v=20261104-central-pix-v1/);
+  assert.match(sw,/fda-dev-v2-20261104-central-pix-v1/);
   assert.match(sw,/caches\.delete\(k\)/);
   assert.match(server,/Cache-Control', 'no-store/);
   assert.doesNotMatch(sw,/indexedDB\.deleteDatabase/);
