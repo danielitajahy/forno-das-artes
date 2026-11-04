@@ -1,0 +1,27 @@
+{
+  "preserved": [
+    {
+      "file": "PREVIA_VISUAL.html",
+      "sha256": "d99f0495d96a0da4dd887fd51a41f80ac215abfab22a1b262935b6638964220e",
+      "unchanged": true
+    },
+    {
+      "file": "PREVIA_FINANCEIRA.html",
+      "sha256": "619814a330ca1256363f9dec9eda9385ebc033234e5b180f38e62a2cc9601c63",
+      "unchanged": true
+    },
+    {
+      "file": "entregas/Forno_das_Artes_WINDOWS_CONFERENCIA_2026-11-04_v2.zip",
+      "sha256": "272b351eab90b470be9950ada1ad423418adfc86475deaeded88c4844d0e4114",
+      "unchanged": true
+    },
+    {
+      "file": "entregas/Forno_das_Artes_PAINEL_FINANCEIRO_TESTES_2026-11-04.zip",
+      "sha256": "d1af38a13d1867f7645aae216636e074fd1ebce834ea4611a4850c1c0eecb75d",
+      "unchanged": true
+    }
+  ],
+  "pdfPrivateMarkersFound": false,
+  "originalRealBackupsRead": false,
+  "realStudentPINsChanged": false
+}

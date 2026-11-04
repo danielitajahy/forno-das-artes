@@ -1,7 +1,7 @@
 // Cache version bumped for the password visibility and menu ingredient color update.
 // IndexedDB (local orders/settings) is not touched when old asset caches are removed.
-const CACHE='fda-dev-v2-20261104-financeiro-v1';
-const ASSETS=['./index.html','./manifest.webmanifest','./app/ui.js','./app/core.js','./app/storage.js','./app/seed.js','./app/app.css','./app/appearance.js','./app/order-intent.js','./app/finance-results.js','./app/finance-ui.js'];
+const CACHE='fda-dev-v2-20261104-avaliadores-v1';
+const ASSETS=['./index.html','./manifest.webmanifest','./app/ui.js','./app/core.js','./app/storage.js','./app/seed.js','./app/app.css','./app/appearance.js','./app/order-intent.js','./app/finance-results.js','./app/finance-ui.js','./app/evaluators.js','./app/access-ui.js'];
 const scope=new URL(self.registration.scope);
 const ASSET_URLS=new Map(ASSETS.map(path=>[new URL(path,scope).pathname,new URL(path,scope).href]));
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));

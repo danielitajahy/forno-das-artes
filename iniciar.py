@@ -8,7 +8,7 @@ import argparse,json,sys,threading,webbrowser
 
 ROOT=Path(__file__).resolve().parent
 PORT=8766
-REQUIRED=('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js')
+REQUIRED=('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js','app/evaluators.js','app/access-ui.js')
 
 def check_package(root=ROOT):
     missing=[name for name in REQUIRED if not(root/name).is_file()]
@@ -19,7 +19,7 @@ def allowed_path(path):
     path=unquote(urlsplit(path).path)
     parts=path.strip('/').split('/')
     if any(x in ('..','.') or x.startswith('.') for x in parts) or '\\' in path:return False
-    if path in ('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html'):return True
+    if path in ('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):return True
     suffix=Path(path).suffix.lower()
     return (parts[0]=='app' and suffix in ('.js','.css')) or (parts[0] in ('docs','plano-c','evidencias') and suffix in ('.md','.html','.pdf','.png','.json','.txt'))
 
@@ -37,12 +37,12 @@ class Handler(SimpleHTTPRequestHandler):
         if urlsplit(self.path).path=='/_forno_health':
             raw=json.dumps({'application':'forno-das-artes','static_only':True,'database_changed':False}).encode()
             self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw);return
-        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html'):self.send_error(404);return
+        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):self.send_error(404);return
         if self.preview_only and urlsplit(self.path).path=='/':self.path='/PREVIA_VISUAL.html'
         if not allowed_path(self.path):self.send_error(404);return
         super().do_GET()
     def do_HEAD(self):
-        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html'):self.send_error(404);return
+        if self.preview_only and urlsplit(self.path).path not in ('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html'):self.send_error(404);return
         if self.preview_only and urlsplit(self.path).path=='/':self.path='/PREVIA_VISUAL.html'
         if not allowed_path(self.path):self.send_error(404);return
         super().do_HEAD()
@@ -54,6 +54,7 @@ def make_server(root=ROOT,port=PORT,preview_only=False):
 def main(argv=None):
     parser=argparse.ArgumentParser(description='Forno das Artes — notebook central')
     parser.add_argument('--check',action='store_true',help='Verificar pacote sem iniciar servidor, navegador ou banco')
+    parser.add_argument('--evaluators-test',action='store_true',help='Cópia fictícia dos avaliadores, origem isolada 8872')
     parser.add_argument('--financial-test',action='store_true',help='Aplicativo financeiro em origem de teste isolada 8871; nunca importar dados reais aqui')
     parser.add_argument('--preview',action='store_true',help='Prévia fictícia isolada na porta 8870; não serve o aplicativo operacional')
     parser.add_argument('--no-browser',action='store_true',help='Não abrir navegador automaticamente')
@@ -62,14 +63,15 @@ def main(argv=None):
         if sys.version_info<(3,10):raise RuntimeError('Python 3.10 ou superior necessário; use o iniciador CMD para alternativa nativa do Windows.')
         result=check_package()
         if args.check:print(json.dumps(result,ensure_ascii=False));return 0
-        server=make_server(port=8870 if args.preview else 8871 if args.financial_test else PORT,preview_only=args.preview)
+        server=make_server(port=8870 if args.preview else 8872 if args.evaluators_test else 8871 if args.financial_test else PORT,preview_only=args.preview)
     except (OSError,RuntimeError) as exc:
         print('Não foi possível iniciar o Forno das Artes: '+str(exc),file=sys.stderr)
-        if args.financial_test:print('Teste financeiro usa a porta 8871. Preserve a operação 8766; não importe dados reais ou mude de porta.',file=sys.stderr)
+        if args.evaluators_test:print('Teste dos avaliadores usa 8872; não importe dados reais nem altere a instalação operacional.',file=sys.stderr)
+        elif args.financial_test:print('Teste financeiro usa a porta 8871. Preserve a operação 8766; não importe dados reais ou mude de porta.',file=sys.stderr)
         elif args.preview:print('Prévia usa a porta 8870. Feche somente outra prévia nessa porta; mantenha o servidor operacional 8766 intacto. Se abriu dentro do ZIP, extraia todos os arquivos.',file=sys.stderr)
         else:print('Se a porta 8766 estiver ocupada, preserve o banco e feche o servidor anterior conscientemente. Não troque de porta ou limpe dados. Se abriu dentro do ZIP, extraia todos os arquivos.',file=sys.stderr)
         return 1
-    url=f"http://127.0.0.1:{8870 if args.preview else 8871 if args.financial_test else PORT}/{'PREVIA_VISUAL.html' if args.preview else 'index.html'}"
+    url=f"http://127.0.0.1:{8870 if args.preview else 8872 if args.evaluators_test else 8871 if args.financial_test else PORT}/{'PREVIA_VISUAL.html' if args.preview else 'index.html'}"
     print('Forno das Artes — '+url,flush=True)
     print('Mantenha esta janela aberta. Ctrl+C encerra somente o servidor. Dados do navegador não são apagados.',flush=True)
     if not args.no_browser:

@@ -1,0 +1,22 @@
+{
+  "checks": 14,
+  "checksPassed": [
+    "Painel aproveita lançamentos existentes e mostra custos ausentes sem criar dados",
+    "Ficha editável calcula gramas/kg, oito fatias e embalagem sem alterar custo legado ou estoque",
+    "Financeiro acessa painel/fichas, sem editar preços ou estoque",
+    "Pedido aguardando não vira receita; confirmação atualiza painel de outra aba automaticamente",
+    "Taxa zero só após conferência; despesas, aporte e reembolso ficam separados",
+    "Editar ficha/preços recalcula apenas custos/preços atuais e preserva fotografia da venda paga",
+    "Cancelamento pago retira venda válida, preserva obrigação e calcula perda sem retorno físico",
+    "Estorno parcial diminui caixa/obrigação sem criar lucro ou apagar venda histórica",
+    "Devolução de aporte e reembolso movimentam caixa sem repetir despesa/receita no resultado",
+    "Nova inteira usa preço futuro e embalagem correta; acumulado desconta perdas sem dupla contagem",
+    "Reabertura preserva fichas/histórico, celular sem overflow e CSV privado disponível",
+    "Visitante público não recebe o painel de Gestão",
+    "Nova prévia financeira é fictícia e em memória; a prévia dos totens não foi substituída",
+    "Nenhuma exceção JavaScript própria do aplicativo"
+  ],
+  "allDataFictitious": true,
+  "bankValidated": false,
+  "onlineSyncValidated": false
+}

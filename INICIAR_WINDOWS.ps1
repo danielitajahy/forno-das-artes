@@ -1,14 +1,15 @@
 ﻿# Servidor estatico de contingencia. Nao acessa banco, internet, PIN ou pagamentos.
-param([switch]$Verificar,[switch]$SemNavegador,[switch]$Previa,[switch]$FinanceiroTeste,[int]$PortaTeste=0)
+param([switch]$Verificar,[switch]$SemNavegador,[switch]$Previa,[switch]$FinanceiroTeste,[switch]$AvaliadoresTeste,[int]$PortaTeste=0)
 $ErrorActionPreference = 'Stop'
 $Root = [IO.Path]::GetFullPath($PSScriptRoot)
-$Required = @('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js')
+$Required = @('index.html','app/ui.js','app/core.js','app/storage.js','app/app.css','app/seed.js','app/appearance.js','app/order-intent.js','sw.js','manifest.webmanifest','app/finance-results.js','app/finance-ui.js','app/evaluators.js','app/access-ui.js')
 foreach ($Name in $Required) {
     if (-not [IO.File]::Exists((Join-Path $Root $Name))) { throw "Pacote incompleto. Extraia TODO o ZIP. Ausente: $Name" }
 }
 if ($Verificar) { Write-Output 'OK: pacote completo. Nenhum servidor ou banco alterado.'; exit 0 }
 $Port = 8766
 if ($FinanceiroTeste) { $Port=8871 }
+if ($AvaliadoresTeste) { $Port=8872 }
 if ($Previa) { $Port = 8870 }
 if ($PortaTeste -gt 0) { $Port = $PortaTeste } # Somente automacao isolada; nao usar na operacao.
 $Listener = New-Object Net.Sockets.TcpListener([Net.IPAddress]::Parse('127.0.0.1'), $Port)
@@ -46,11 +47,11 @@ try {
             if ($Path -eq '/_forno_health') {
                 Send-Response $Stream 200 'application/json' ([Text.Encoding]::UTF8.GetBytes('{"application":"forno-das-artes","static_only":true,"database_changed":false}')) ($Method -eq 'HEAD'); continue
             }
-            $Allowed=$Path -in @('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html') -or $Path -match '^/app/[^/]+\.(js|css)$' -or $Path -match '^/(docs|plano-c|evidencias)/.+\.(md|html|pdf|png|json|txt)$'
+            $Allowed=$Path -in @('/','/index.html','/sw.js','/manifest.webmanifest','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html') -or $Path -match '^/app/[^/]+\.(js|css)$' -or $Path -match '^/(docs|plano-c|evidencias)/.+\.(md|html|pdf|png|json|txt)$'
             if ($Path.Contains('\') -or $Path -match '(^|/)\.[^/]*(/|$)' -or -not $Allowed) {
                 Send-Response $Stream 404 'text/plain' ([byte[]]@()) ($Method -eq 'HEAD'); continue
             }
-            if ($Previa -and $Path -notin @('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html')) { Send-Response $Stream 404 'text/plain' ([byte[]]@()) ($Method -eq 'HEAD'); continue }
+            if ($Previa -and $Path -notin @('/','/PREVIA_VISUAL.html','/PREVIA_FINANCEIRA.html','/PREVIA_AVALIADORES.html')) { Send-Response $Stream 404 'text/plain' ([byte[]]@()) ($Method -eq 'HEAD'); continue }
             if ($Path -eq '/') { if ($Previa) { $Path='/PREVIA_VISUAL.html' } else { $Path='/index.html' } }
             $File=[IO.Path]::GetFullPath((Join-Path $Root $Path.TrimStart('/')))
             $RootPrefix=$Root+[IO.Path]::DirectorySeparatorChar

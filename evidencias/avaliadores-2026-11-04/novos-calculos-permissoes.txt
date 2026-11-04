@@ -1,0 +1,21 @@
+✔ avaliadores: ausência de premissas não inventa investimento, produção ou equilíbrio (5.707154ms)
+✔ avaliadores: estoque não se transforma em produção (1.465808ms)
+✔ avaliadores: lote documental não altera estoque, receitas ou pedidos (2.080213ms)
+✔ avaliadores: equilíbrio exige custo e todos os custos variáveis conferidos (1.810095ms)
+✔ avaliadores: contribuição negativa não gera equilíbrio enganoso (1.164354ms)
+✔ avaliadores: doação reserva capital, previsões e reembolsos; aporte não é lucro (0.571462ms)
+✔ avaliadores: relatório é projeção consolidada sem nomes, Pix, motivos, credenciais ou notas (24.011456ms)
+✔ avaliadores: consulta é pura e não altera o backup (1.007854ms)
+✔ avaliadores: apresentador não executa comando nem replay de administrador (1.405489ms)
+✔ avaliadores: financeiro com lista explícita somente consulta ou operação concedida (0.568437ms)
+✔ avaliadores: vendedor não paga, cozinha não vê comandos financeiros (0.500728ms)
+✔ avaliadores: não exclui sabor com produção e valida premissas adulteradas (1.041263ms)
+✔ avaliadores: adapter online bloqueia novos PINs e comandos antes de qualquer chamada (1.80617ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49.987926

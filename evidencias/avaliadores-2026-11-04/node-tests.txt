@@ -1,0 +1,135 @@
+✔ novo sabor, edição, reordenação, modos e nutrição fornecida (6.507972ms)
+✔ exclusão sem histórico e arquivo com histórico imutável (1.785487ms)
+✔ preços gerais fatia e inteira e preços individuais preservam pedido antigo (0.79487ms)
+✔ pedido vários sabores calcula total no domínio e somente PIX (0.62572ms)
+✔ aguardando pagamento reserva, não entra na cozinha e exige crédito conferido (1.191312ms)
+✔ inteiras dentro do estoque e prevenção de compra excessiva (0.710535ms)
+✔ limite de venda também reserva saldo; ajuste não compromete reservas (0.81521ms)
+✔ perdas, reposição e disponibilidade por modalidade separada (0.487898ms)
+✔ lista consentida, reposição, confirmação manual e prevenção de aviso duplicado (2.219404ms)
+✔ produto arquivado não pode gerar aviso (0.961615ms)
+✔ conflito de edição e pedidos com mesma revisão: só um vence (0.620993ms)
+✔ repetição após timeout não duplica pedido e detecta reuso com itens diferentes (0.52323ms)
+✔ requestId repete confirmação sem nova cobrança nem audit duplicado (0.471423ms)
+✔ token requestId Pix não grava chave bancária em audit e repete seguro (0.162279ms)
+✔ senhas acima de 999 não truncam e namespaces de instalações são distintos (1.154208ms)
+✔ cancelamento não pago libera reserva sem receita (0.682444ms)
+✔ cancelamento pago documenta devolução e estoque, sem apagar recebimento (1.372839ms)
+✔ cancelamento após entrega permite devolver Pix sem repor produto consumido (1.333252ms)
+✔ despesa prevista pode ser paga e aporte devolvido individualmente (0.892112ms)
+✔ fechamento financeiro com diferença preservada (0.776082ms)
+✔ cozinha não pode confirmar Pix e caixa não pode alterar preços (0.608636ms)
+✔ validação de backup preserva reservas e bloqueia total adulterado (1.157663ms)
+✔ imagem SVG/script rejeitada, CSV neutraliza fórmulas (0.291659ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32.792945
+✔ avaliadores: ausência de premissas não inventa investimento, produção ou equilíbrio (5.298064ms)
+✔ avaliadores: estoque não se transforma em produção (1.451405ms)
+✔ avaliadores: lote documental não altera estoque, receitas ou pedidos (1.764185ms)
+✔ avaliadores: equilíbrio exige custo e todos os custos variáveis conferidos (1.465866ms)
+✔ avaliadores: contribuição negativa não gera equilíbrio enganoso (0.980593ms)
+✔ avaliadores: doação reserva capital, previsões e reembolsos; aporte não é lucro (0.510842ms)
+✔ avaliadores: relatório é projeção consolidada sem nomes, Pix, motivos, credenciais ou notas (24.371788ms)
+✔ avaliadores: consulta é pura e não altera o backup (1.160687ms)
+✔ avaliadores: apresentador não executa comando nem replay de administrador (1.188568ms)
+✔ avaliadores: financeiro com lista explícita somente consulta ou operação concedida (0.420919ms)
+✔ avaliadores: vendedor não paga, cozinha não vê comandos financeiros (0.416402ms)
+✔ avaliadores: não exclui sabor com produção e valida premissas adulteradas (1.095992ms)
+✔ avaliadores: adapter online bloqueia novos PINs e comandos antes de qualquer chamada (1.748863ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.617061
+✔ compra de R$250 paga por pessoa é despesa, não aporte e não saída de caixa até reembolso (5.456366ms)
+✔ compra por quilo usa valor unitário e peso para calcular total em centavos (1.219694ms)
+✔ reembolso exige confirmação e fica ligado a uma compra paga por pessoa (0.323926ms)
+✔ aportes de alunos e compras adiantadas são obrigações separadas sem duplicidade (0.542308ms)
+✔ legado sem dados de pagador permanece válido e não é reclassificado (0.215717ms)
+✔ compras previstas somente viram obrigação após pagamento por pessoa (0.432486ms)
+✔ campos e relatório detalhado existem na interface, sem expor registros automaticamente (0.546694ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17.658855
+✔ aguardando Pix, aporte e devedor não viram faturamento (10.451784ms)
+✔ ficha calcula kg/g e oito fatias, embalagem apenas na modalidade (3.057357ms)
+✔ quantidades volumétricas e custo unitário por base compatível (0.44232ms)
+✔ vazios e zero legado ficam desconhecidos; zero explícito é confirmado (3.172035ms)
+✔ sem taxas inventadas: líquido final pendente até conferir zero ou valor (3.534288ms)
+✔ taxas corrigidas são versionadas, sem somar versões antigas ou duplicar replay (3.744038ms)
+✔ despesa prevista/paga e obrigação de terceiro ficam separadas, sem CMV em duplicidade (4.519838ms)
+✔ aporte e devolução de aporte só movimentam caixa, não resultado (3.489743ms)
+✔ reembolso pago uma vez altera caixa mas não repete despesa no resultado (7.067615ms)
+✔ cancelamento não pago libera estoque sem receita ou custo realizado (2.780199ms)
+✔ cancelamento pago gera obrigação, estorno parcial/total não vira lucro transitório (4.92162ms)
+✔ retorno físico não presume recuperação da embalagem (7.489487ms)
+✔ preço e custo históricos não mudam ao atualizar ficha/preço (4.465388ms)
+✔ oitavos de centavo preservam custo exato de oito fatias (2.959093ms)
+✔ custo manual legado positivo é preservado como total, sem embalagem adicional (3.583291ms)
+✔ venda antiga sem custo não é recusteada com ficha atual (2.414782ms)
+✔ backups antigos e leitura do painel não criam coleções automaticamente (2.240216ms)
+✔ snapshot adulterado é rejeitado e ficha não muda menu/estoque/histórico (3.930702ms)
+✔ permissões: Financeiro altera custos/taxas, caixa/cozinha não (2.394071ms)
+✔ taxa não conferida e receita inválida são rejeitadas sem mutar origem (2.91005ms)
+✔ taxa já lançada como despesa de caixa é descontada uma única vez (3.349077ms)
+✔ vínculos de taxas não podem exceder a despesa confirmada (3.318941ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.541155
+✔ financeiro registra aporte, beneficiário e devolução parcial sem duplicar venda (4.893308ms)
+✔ financeiro sem permissão de preço, estoque, vendas, pagamento ou dívida (0.495119ms)
+✔ financeiro confere reembolso realizado externamente (0.555487ms)
+✔ contrato IndexedDB mantém nome, versão e store, sem migração ou limpeza (0.451965ms)
+✔ intenção por aba preserva UUIDs e não armazena credenciais (0.946582ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16.871345
+✔ cadastro de Pix individual, edição e proteção contra duplicidade (4.975909ms)
+✔ pendência de devedor soma saldo e aceita pagamentos parciais com confirmação (1.715373ms)
+✔ dados financeiros e chaves Pix não podem ser alterados por caixa/cozinha (0.242958ms)
+✔ backup legado ainda é válido sem coleções opcionais (0.235206ms)
+✔ interface contém cadastro, controle de cobrança e demonstração, mas não campos pessoais no publicView (0.814328ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13.868359
+✔ criação e login incluem botão visível de mostrar/ocultar senha (1.065988ms)
+✔ botão do olho tem coluna própria e permanece visível em telas estreitas (0.206464ms)
+✔ ingredientes dos cards públicos recebem cor própria de destaque (0.151192ms)
+✔ cache de interface é atualizado sem apagar IndexedDB (0.169459ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7.697683

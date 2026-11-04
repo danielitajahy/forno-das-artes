@@ -1,0 +1,35 @@
+{
+  "files": [
+    {
+      "file": "tests/core.test.mjs",
+      "tests": 23
+    },
+    {
+      "file": "tests/evaluators.test.mjs",
+      "tests": 13
+    },
+    {
+      "file": "tests/financeiro-reembolsos.test.mjs",
+      "tests": 7
+    },
+    {
+      "file": "tests/financial-results.test.mjs",
+      "tests": 22
+    },
+    {
+      "file": "tests/frontend-update.test.mjs",
+      "tests": 5
+    },
+    {
+      "file": "tests/pix-devedores-fila.test.mjs",
+      "tests": 5
+    },
+    {
+      "file": "tests/ui-visual.test.mjs",
+      "tests": 4
+    }
+  ],
+  "total": 79,
+  "new": 13,
+  "regression": 66
+}

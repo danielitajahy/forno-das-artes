@@ -1,0 +1,26 @@
+FORNO DAS ARTES — PAINEL DOS AVALIADORES — CONFERENCIA 04/11/2026
+
+1. Extraia este ZIP em OUTRA pasta. Preserve as entregas anteriores dos totens e do financeiro.
+2. Execute TESTAR_AVALIADORES_WINDOWS.cmd. O teste usa http://127.0.0.1:8872/index.html.
+3. Para ENSAIAR COM NUMEROS FICTICIOS, abra:
+   http://127.0.0.1:8872/PREVIA_AVALIADORES.html
+4. Para testar acessos, crie administracao ficticia no index. Em Gestao > Gerenciar Acessos,
+   cadastre perfis e libere explicitamente. Administrador, Financeiro e Apresentador precisam
+   de PIN e senha adicional. Nao use PINs reais de estudantes nesta copia.
+5. Nao importe backups reais aqui. Nao sobrescreva a origem operacional 8766 nem a financeira 8871.
+6. A atualizacao e LOCAL: abas deste navegador/notebook. Celulares diferentes NAO sincronizam.
+7. Para PDF, no Painel dos Avaliadores clique em Gerar PDF / imprimir prestacao e depois
+   Imprimir / Salvar como PDF. O exemplo incluido e ficticio, nao representa os dados da feira.
+
+Guias:
+- docs/GUIA-APRESENTADORES-AVALIADORES.md
+- docs/EQUIPAMENTOS-AVALIADORES-WINDOWS.md
+- docs/PAINEL-AVALIADORES-04-11-2026.md (relatorio, formulas, campos e testes)
+
+Exemplo PDF: evidencias/avaliadores-2026-11-04/PRESTACAO_CONTAS_EXEMPLO_FICTICIO.pdf
+Capturas e resultados: evidencias/avaliadores-2026-11-04
+
+37 testes/verificacoes novos e 108 de regressao aprovados com dados ficticios.
+Windows fisico, telão, impressora, sincronizacao online e Pix automatico nao homologados.
+Nenhum banco real, PIN existente, backup recuperado ou site publicado foi alterado.
+Novas contas locais ficam separadas do backup financeiro; nao sao migradas automaticamente.

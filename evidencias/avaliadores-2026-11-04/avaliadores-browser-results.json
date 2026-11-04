@@ -1,0 +1,29 @@
+{
+  "checks": 20,
+  "checksPassed": [
+    "Cadastrar perfis não altera estado financeiro, estoque, pedidos, fichas ou credenciais anteriores da base fictícia",
+    "PINs e senhas usam verificadores PBKDF2; listagem administrativa não devolve hashes",
+    "Gestão oferece perfis, concessões, PIN/reset, bloqueio e trilha; novas contas começam sem liberação",
+    "Login PIN + senha libera apenas painel de leitura ao APRESENTADOR",
+    "14 chamadas diretas de mutação/exportação/gestão negadas; ator não pode ser promovido por atribuição; resposta sem dados privados",
+    "Indicadores têm Ver cálculo; ausência de investimento e produção não é preenchida pelo estoque",
+    "Produção explícita e premissas atualizam painel em outra sessão local da mesma origem; equilíbrio condicional disponível",
+    "Aguardando Pix não vira receita; pagamento e taxa conferida atualizam consolidado automaticamente no mesmo notebook",
+    "Despesa, reposição de estoque e devolução de capital atualizam sem confundir aporte com receita",
+    "Vendedor registra autoria e vê apenas seu pedido mais fila pública completa; cozinha recebe somente pedidos pagos sem custos ou preços",
+    "Modo pitch com contraste >=4,5:1 e PDF gerado com data, cálculos abertos e totais sem nomes, PINs, bancos ou valores individuais",
+    "Painel responsivo em notebook e celular, com tabelas em rolagem interna",
+    "Cancelamento e estorno preservam recebimento bruto histórico e retiram venda válida/líquido",
+    "Cinco perfis exercitados: financeiro sem concessão não lança; vendedor/cozinha sem financeiro; administrador lança",
+    "Concessão financeira invalida sessão antiga, preserva PIN/senha vazios e libera somente o comando concedido após relogin",
+    "Redefinir PIN explicitamente selecionado invalida sessão e PIN anteriores, sem redefinir outras contas",
+    "Bloqueio invalida sessão ativa, comandos e consulta; painel remove resultados após aviso da mesma origem",
+    "PIN sem senha financeira, vendedor bloqueado e excesso de tentativas negados; bloqueio persiste em outra instância",
+    "Prévia independente abre painel fictício sem criar IndexedDB nem substituir prévias anteriores",
+    "Nenhuma exceção JavaScript do aplicativo nos cenários novos"
+  ],
+  "allDataFictitious": true,
+  "onlineSyncValidated": false,
+  "bankValidated": false,
+  "physicalWindowsValidated": false
+}
