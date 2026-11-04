@@ -2,3 +2,4 @@
 *.pdf binary
 *.cmd text eol=crlf
 *.ps1 text eol=crlf
+LEIA_PRIMEIRO_WINDOWS.txt text eol=crlf

@@ -15,7 +15,7 @@ Se a política da escola bloquear scripts PowerShell, não altere políticas do 
 
 ## Testar o aplicativo completo em base fictícia
 
-`INICIAR_WINDOWS.cmd` verifica pacote e Python 3.10+. Tenta `py -3`, depois `python`; se não estiverem disponíveis, usa o servidor nativo `INICIAR_WINDOWS.ps1`. Não baixa projeto ou pacotes. As janelas exibem erros e ficam abertas com `pause`.
+`INICIAR_WINDOWS.cmd` verifica pacote e Python 3.10+. Tenta `py -3`, depois `python` (ignora o alias WindowsApps para não abrir a Microsoft Store); se não estiverem disponíveis, usa o servidor nativo `INICIAR_WINDOWS.ps1`. Não baixa projeto ou pacotes. As janelas exibem erros e ficam abertas com `pause`.
 
 **Não use esse iniciador no perfil operacional antes de aprovação.** Para conferir funcionalidades completas, o fornecedor deve usar um perfil Windows/navegador separado e dados fictícios, em máquina de ensaio. A origem operacional continua `http://127.0.0.1:8766/index.html`; a prévia não é migração.
 

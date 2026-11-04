@@ -15,6 +15,6 @@ test_native_preflight (test_windows_native.Native.test_native_preflight) ... ok
 test_native_preview_blocks_operational_resources (test_windows_native.Native.test_native_preview_blocks_operational_resources) ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 2.911s
+Ran 15 tests in 2.467s
 
 OK

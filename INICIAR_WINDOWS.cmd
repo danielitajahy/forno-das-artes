@@ -18,6 +18,9 @@ goto FINAL
 :TESTAR_PYTHON
 where python >nul 2>nul
 if errorlevel 1 goto NATIVO
+rem Evita abrir a Microsoft Store quando python e apenas um alias do Windows.
+where python 2>nul | findstr /i /c:"WindowsApps" >nul
+if not errorlevel 1 goto NATIVO
 python -c "import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)" >nul 2>nul
 if errorlevel 1 goto NATIVO
 python "%~dp0iniciar.py"
